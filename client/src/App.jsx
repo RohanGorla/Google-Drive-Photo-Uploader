@@ -8,12 +8,19 @@ function App() {
 
   async function handleSubmit() {
     for (const file of files) {
-      const options = {
-        maxSizeMB: 4,
-        useWebWorker: true,
-      };
-      const compressedFile = await imageCompression(file, options);
-      console.log(compressedFile.size);
+      let compressedFile;
+      if (file.size / (1024 * 1024) > 4) {
+        const options = {
+          maxSizeMB: 4,
+          useWebWorker: true,
+        };
+        compressedFile = await imageCompression(file, options);
+      } else {
+        compressedFile = file;
+      }
+      console.log(compressedFile.size / (1024 * 1024), "MB");
+      let formData = new FormData();
+      formData.append("files", compressedFile);
     }
   }
 
