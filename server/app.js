@@ -22,64 +22,60 @@ const auth = new google.auth.JWT(process.env.CE, null, process.env.PK, [
 
 const drive = google.drive({ version: "v3", auth: auth });
 
-async function createFolder(folderName) {
-  try {
-    const fileMetadata = {
-      name: folderName,
-      mimeType: "application/vnd.google-apps.folder",
-    };
-
-    fileMetadata.parents = [process.env.ID];
-
-    const response = await drive.files.create({
-      resource: fileMetadata,
-      fields: "id, name",
-    });
-
-    console.log("File created successfully!");
-    return response.data;
-  } catch (error) {
-    console.error("Error creating folder:", error.message);
-  }
-}
-
-async function uploadToDrive(file, userName, folderId) {
-  const { buffer } = file;
-  const fileName = `${userName}-${Date.now()}`;
-  function bufferToStream(buffer) {
-    const readable = new Readable();
-    readable.push(buffer);
-    readable.push(null);
-    return readable;
-  }
-  const metadata = {
-    name: fileName,
-    parents: [folderId],
-  };
-
-  const media = {
-    mimeType: file.mimetype,
-    body: bufferToStream(buffer),
-  };
-
-  try {
-    const response = await drive.files.create({
-      resource: metadata,
-      media,
-      fields: "*",
-    });
-    return response.data;
-  } catch (error) {
-    console.error(`Error uploading ${userName}:`, error.message);
-    throw error;
-  }
-}
-
 app.get("/", (req, res) => {
   res.json("listening");
 });
 
+/* Get All Files API */
+
+app.get("/getallfiles", async (req, res) => {
+  try {
+    const response = await drive.files.list({
+      fields: "*",
+    });
+    res.send({
+      access: true,
+      successMsg: "Successfully fetched all files!",
+      data: response.data,
+    });
+  } catch (error) {
+    console.log(error);
+    req.send({
+      access: false,
+      errorMsg: "Files could not be fetched!",
+      error: error,
+    });
+  }
+});
+
+/* Create Folder API */
+
 app.post("/createfolder", async (req, res) => {
+  /* Create Folder Function */
+
+  async function createFolder(folderName) {
+    try {
+      const fileMetadata = {
+        name: folderName,
+        mimeType: "application/vnd.google-apps.folder",
+      };
+
+      fileMetadata.parents = [process.env.ID];
+
+      const response = await drive.files.create({
+        resource: fileMetadata,
+        fields: "id, name",
+      });
+
+      console.log("File created successfully!");
+      return response.data;
+    } catch (error) {
+      console.error("Error creating folder:", error.message);
+    }
+  }
+
+  /* Handling Request Parameters -> [Folder Name] */
+
   try {
     const folderName = req.body.folderName;
     const folderCreationResponse = await createFolder(folderName);
@@ -98,7 +94,45 @@ app.post("/createfolder", async (req, res) => {
   }
 });
 
+/* Upload File To Google Drive API */
+
 app.post("/upload", upload.single("files"), async (req, res) => {
+  /* Upload To Drive Function */
+
+  async function uploadToDrive(file, userName, folderId) {
+    const { buffer } = file;
+    const fileName = `${userName}-${Date.now()}`;
+    function bufferToStream(buffer) {
+      const readable = new Readable();
+      readable.push(buffer);
+      readable.push(null);
+      return readable;
+    }
+    const metadata = {
+      name: fileName,
+      parents: [folderId],
+    };
+
+    const media = {
+      mimeType: file.mimetype,
+      body: bufferToStream(buffer),
+    };
+
+    try {
+      const response = await drive.files.create({
+        resource: metadata,
+        media,
+        fields: "*",
+      });
+      return response.data;
+    } catch (error) {
+      console.error(`Error uploading ${userName}:`, error.message);
+      throw error;
+    }
+  }
+
+  /* Handling  Files -> [Images] And Request Parameters -> [Username & Folder Id] */
+
   try {
     const file = req.file;
     const { userName, folderId } = req.body;
