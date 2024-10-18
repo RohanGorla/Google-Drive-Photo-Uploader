@@ -18,7 +18,7 @@ function App() {
     if (folderCreationResponse.data.access) {
       let count = 1;
       const folderId = folderCreationResponse.data.data.id;
-      console.log(folderName);
+      console.log(folderId);
       for (const file of files) {
         let compressedFile;
         if (file.size / (1024 * 1024) > 4) {
