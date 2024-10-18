@@ -56,8 +56,16 @@ function App() {
     }
   }
 
+  async function getAllFiles() {
+    const getFilesResponse = await axios.get(
+      `${import.meta.env.VITE_BASE_URL}/getallfiles`
+    );
+    console.log(getFilesResponse.data.data.files);
+  }
+
   return (
     <div>
+      <button onClick={getAllFiles}>Get files</button>
       <div>
         <div className="Input-Files">
           <input
