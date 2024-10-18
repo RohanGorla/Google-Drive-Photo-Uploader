@@ -21,6 +21,12 @@ function App() {
       console.log(compressedFile.size / (1024 * 1024), "MB");
       let formData = new FormData();
       formData.append("files", compressedFile);
+      const response = await axios.post("/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(response);
     }
   }
 
