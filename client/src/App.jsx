@@ -1,35 +1,36 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import axios from "axios";
+import imageCompression from "browser-image-compression";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [files, setFiles] = useState([]);
+
+  async function handleSubmit() {
+    for (const file of files) {
+      const options = {
+        maxSizeMB: 4,
+        useWebWorker: true,
+      };
+      const compressedFile = await imageCompression(file, options);
+      console.log(compressedFile.size);
+    }
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <input
+        type="file"
+        accept="image/*"
+        name="images"
+        multiple
+        onChange={(e) => {
+          setFiles(e.target.files);
+        }}
+      ></input>
+      <button onClick={handleSubmit}>Submit</button>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
