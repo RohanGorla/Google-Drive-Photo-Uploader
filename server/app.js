@@ -22,7 +22,28 @@ const auth = new google.auth.JWT(process.env.CE, null, process.env.PK, [
 
 const drive = google.drive({ version: "v3", auth: auth });
 
-async function uploadToDrive(file, userName) {
+async function createFolder(folderName) {
+  try {
+    const fileMetadata = {
+      name: folderName,
+      mimeType: "application/vnd.google-apps.folder",
+    };
+
+    fileMetadata.parents = [process.env.ID];
+
+    const response = await drive.files.create({
+      resource: fileMetadata,
+      fields: "id, name",
+    });
+
+    console.log("File created successfully!");
+    return response.data;
+  } catch (error) {
+    console.error("Error creating folder:", error.message);
+  }
+}
+
+async function uploadToDrive(file, userName, folderId) {
   const { buffer } = file;
   const fileName = `${userName}-${Date.now()}`;
   function bufferToStream(buffer) {
@@ -33,7 +54,7 @@ async function uploadToDrive(file, userName) {
   }
   const metadata = {
     name: fileName,
-    parents: [process.env.ID],
+    parents: [folderId],
   };
 
   const media = {
@@ -58,14 +79,34 @@ app.get("/", (req, res) => {
   res.json("listening");
 });
 
+app.post("/createfolder", async (req, res) => {
+  try {
+    const folderName = req.body.folderName;
+    const folderCreationResponse = await createFolder(folderName);
+    res.send({
+      access: true,
+      successMsg: "Folder creation successful!",
+      data: folderCreationResponse,
+    });
+  } catch (error) {
+    console.log(error);
+    res.send({
+      access: false,
+      errorMsg: "Folder creation failed!",
+      error: error,
+    });
+  }
+});
+
 app.post("/upload", upload.single("files"), async (req, res) => {
   try {
     const file = req.file;
-    const { userName } = req.body;
+    const { userName, folderId } = req.body;
     console.log("File -> ", file);
     console.log("User Name -> ", userName);
+    console.log("Folder Id -> ", folderId);
 
-    const fileData = await uploadToDrive(file, userName);
+    const fileData = await uploadToDrive(file, userName, folderId);
 
     res.send({
       access: true,
