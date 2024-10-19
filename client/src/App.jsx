@@ -28,7 +28,7 @@ function App() {
         let compressedFile;
         if (file.size / (1024 * 1024) > 4) {
           const options = {
-            maxSizeMB: 1,
+            maxSizeMB: 4,
             useWebWorker: true,
           };
           compressedFile = await imageCompression(file, options);
