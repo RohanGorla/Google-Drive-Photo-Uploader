@@ -10,6 +10,7 @@ function App() {
   const [currentFolder, setCurrentFolder] = useState("");
   const [folderFiles, setFolderFiles] = useState([]);
   const [proxyUrl, setProxyUrl] = useState([]);
+  const [currentImage, setCurrentImage] = useState(0);
 
   async function handleSubmit() {
     const folderCreationResponse = await axios.post(
@@ -78,10 +79,18 @@ function App() {
     if (response.data.access) {
       const imagesData = response.data.data;
       setFolderFiles(imagesData);
-      for (let i = 0; i < imagesData.length; i++) {
-        getProxyUrl(
-          `https://drive.google.com/uc?export=view&id=${imagesData[i].id}`
-        );
+      if (imagesData.length <= 5) {
+        for (let i = 0; i < imagesData.length; i++) {
+          await getProxyUrl(
+            `https://drive.google.com/uc?export=view&id=${imagesData[i].id}`
+          );
+        }
+      } else {
+        for (let i = 0; i < 5; i++) {
+          await getProxyUrl(
+            `https://drive.google.com/uc?export=view&id=${imagesData[i].id}`
+          );
+        }
       }
     } else {
       console.log(response.data.error);
@@ -103,6 +112,34 @@ function App() {
       return [...prev, imageUrl];
     });
   }
+
+  async function getNextImages(currentImageIndex) {
+    const totalImagesCount = folderFiles.length;
+    const maxLoad = 5;
+    if (currentImageIndex + maxLoad < totalImagesCount - 1) {
+      for (
+        let i = currentImageIndex + 1;
+        i < currentImageIndex + maxLoad + 1;
+        i++
+      ) {
+        await getProxyUrl(
+          `https://drive.google.com/uc?export=view&id=${folderFiles[i].id}`
+        );
+      }
+    } else if (currentImageIndex + maxLoad >= totalImagesCount - 1) {
+      for (let i = currentImageIndex + 1; i < totalImagesCount; i++) {
+        await getProxyUrl(
+          `https://drive.google.com/uc?export=view&id=${folderFiles[i].id}`
+        );
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (currentImage == proxyUrl.length - 1) {
+      getNextImages(currentImage);
+    }
+  }, [currentImage]);
 
   useEffect(() => {
     getAllFolders();
@@ -160,7 +197,13 @@ function App() {
         {proxyUrl.map((image, index) => {
           return (
             <div key={index} className="Folder_Images--Image">
-              <img src={image} loading="lazy"></img>
+              <img
+                src={image}
+                loading="lazy"
+                onClick={() => {
+                  setCurrentImage(index);
+                }}
+              ></img>
             </div>
           );
         })}
