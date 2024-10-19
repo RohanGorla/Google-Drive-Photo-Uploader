@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import imageCompression from "browser-image-compression";
 import "./App.css";
@@ -6,6 +6,8 @@ import "./App.css";
 function App() {
   const [files, setFiles] = useState([]);
   const [userName, setUserName] = useState("");
+  const [allFoldersData, setAllFoldersData] = useState([]);
+  const [folderFiles, setFolderFiles] = useState([]);
 
   async function handleSubmit() {
     const folderCreationResponse = await axios.post(
@@ -58,16 +60,23 @@ function App() {
 
   async function getAllFiles() {
     const getFilesResponse = await axios.get(
-      `${import.meta.env.VITE_BASE_URL}/getallfiles`
+      `${import.meta.env.VITE_BASE_URL}/getallfolders`
     );
-    console.log(getFilesResponse.data.data.files);
+    console.log(getFilesResponse.data.data);
+    setAllFoldersData(getFilesResponse.data.data);
   }
 
+  useEffect(() => {
+    getAllFiles();
+  }, []);
+
   return (
-    <div>
-      <button onClick={getAllFiles}>Get files</button>
-      <div>
-        <div className="Input-Files">
+    <div className="Main">
+      <header className="Header">
+        <h1>Engagement Ceremony</h1>
+      </header>
+      <section className="Input_Form">
+        <div className="Files_Input">
           <input
             type="file"
             accept="image/*"
@@ -78,7 +87,7 @@ function App() {
             }}
           ></input>
         </div>
-        <div className="User-Name">
+        <div className="Name_Input">
           <input
             type="text"
             onChange={(e) => {
@@ -86,8 +95,20 @@ function App() {
             }}
           ></input>
         </div>
-        <button onClick={handleSubmit}>Submit</button>
-      </div>
+        <button onClick={handleSubmit} className="Submit_Button">
+          Submit
+        </button>
+      </section>
+      <section className="Folders">
+        <p>Pick a folde from below</p>
+        {allFoldersData?.map((folder, index) => {
+          return (
+            <div key={index} className="Folders--Folder">
+              <p className="Folder_Name">{folder.name}</p>
+            </div>
+          );
+        })}
+      </section>
     </div>
   );
 }
