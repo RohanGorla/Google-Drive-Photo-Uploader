@@ -13,8 +13,12 @@ app.use(cors());
 
 const PORT = process.env.PORT || 3000;
 
+/* Multer Storage Configuration */
+
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
+
+/* Google Auth */
 
 const auth = new google.auth.JWT(process.env.CE, null, process.env.PK, [
   "https://www.googleapis.com/auth/drive.file",
@@ -22,25 +26,39 @@ const auth = new google.auth.JWT(process.env.CE, null, process.env.PK, [
 
 const drive = google.drive({ version: "v3", auth: auth });
 
+/* Basic Get API */
+
 app.get("/", (req, res) => {
   res.json("listening");
 });
 
-/* Get All Files API */
+/* Get All Folders API */
 
-app.get("/getallfiles", async (req, res) => {
+app.get("/getallfolders", async (req, res) => {
   try {
-    const response = await drive.files.list({
-      fields: "*",
-    });
+    let filesArray = [];
+    let nextPageToken = null;
+    const query = `'${process.env.ID}' in parents`;
+    console.log("Fetch starts!");
+    do {
+      const response = await drive.files.list({
+        q: query,
+        pageToken: nextPageToken,
+        fields: "nextPageToken, files(*)",
+      });
+      nextPageToken = response.data.nextPageToken;
+      filesArray = filesArray.concat(response.data.files);
+    } while (nextPageToken);
+    console.log("Fetch ends!");
+
     res.send({
       access: true,
       successMsg: "Successfully fetched all files!",
-      data: response.data,
+      data: filesArray,
     });
   } catch (error) {
     console.log(error);
-    req.send({
+    res.send({
       access: false,
       errorMsg: "Files could not be fetched!",
       error: error,
