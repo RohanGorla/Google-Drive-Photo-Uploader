@@ -58,7 +58,7 @@ function App() {
     }
   }
 
-  async function getAllFiles() {
+  async function getAllFolders() {
     const getFilesResponse = await axios.get(
       `${import.meta.env.VITE_BASE_URL}/getallfolders`
     );
@@ -66,8 +66,22 @@ function App() {
     setAllFoldersData(getFilesResponse.data.data);
   }
 
+  async function getFolderFiles(id) {
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/getfolderfiles`,
+      {
+        folderId: id,
+      }
+    );
+    if (response.data.access) {
+      setFolderFiles(response.data.data);
+    } else {
+      console.log(response.data.error);
+    }
+  }
+
   useEffect(() => {
-    getAllFiles();
+    getAllFolders();
   }, []);
 
   return (
@@ -103,7 +117,13 @@ function App() {
         <p>Pick a folde from below</p>
         {allFoldersData?.map((folder, index) => {
           return (
-            <div key={index} className="Folders--Folder">
+            <div
+              key={index}
+              className="Folders--Folder"
+              onClick={() => {
+                getFolderFiles(folder.id);
+              }}
+            >
               <p className="Folder_Name">{folder.name}</p>
             </div>
           );
