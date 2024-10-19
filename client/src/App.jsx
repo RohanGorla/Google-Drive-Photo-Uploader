@@ -81,13 +81,13 @@ function App() {
       setFolderFiles(imagesData);
       if (imagesData.length <= 5) {
         for (let i = 0; i < imagesData.length; i++) {
-          await getProxyUrl(
+          let response = await getProxyUrl(
             `https://drive.google.com/uc?export=view&id=${imagesData[i].id}`
           );
         }
       } else {
         for (let i = 0; i < 5; i++) {
-          await getProxyUrl(
+          let response = await getProxyUrl(
             `https://drive.google.com/uc?export=view&id=${imagesData[i].id}`
           );
         }
@@ -101,7 +101,7 @@ function App() {
     const response = await axios.get(
       `${
         import.meta.env.VITE_BASE_URL
-      }/proxy-image?imageUrl=${encodeURIComponent(url)}`,
+      }/proxy-image?imageUrl=${encodeURIComponent(url)}&timestamp=${Date.now()}`,
       {
         responseType: "blob",
       }
@@ -122,13 +122,13 @@ function App() {
         i < currentImageIndex + maxLoad + 1;
         i++
       ) {
-        await getProxyUrl(
+        let response = await getProxyUrl(
           `https://drive.google.com/uc?export=view&id=${folderFiles[i].id}`
         );
       }
     } else if (currentImageIndex + maxLoad >= totalImagesCount - 1) {
       for (let i = currentImageIndex + 1; i < totalImagesCount; i++) {
-        await getProxyUrl(
+        let response = await getProxyUrl(
           `https://drive.google.com/uc?export=view&id=${folderFiles[i].id}`
         );
       }
