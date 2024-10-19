@@ -7,7 +7,9 @@ function App() {
   const [files, setFiles] = useState([]);
   const [userName, setUserName] = useState("");
   const [allFoldersData, setAllFoldersData] = useState([]);
+  const [currentFolder, setCurrentFolder] = useState("");
   const [folderFiles, setFolderFiles] = useState([]);
+  const [proxyUrl, setProxyUrl] = useState([]);
 
   async function handleSubmit() {
     const folderCreationResponse = await axios.post(
@@ -25,7 +27,7 @@ function App() {
         let compressedFile;
         if (file.size / (1024 * 1024) > 4) {
           const options = {
-            maxSizeMB: 4,
+            maxSizeMB: 1,
             useWebWorker: true,
           };
           compressedFile = await imageCompression(file, options);
@@ -74,10 +76,32 @@ function App() {
       }
     );
     if (response.data.access) {
-      setFolderFiles(response.data.data);
+      const imagesData = response.data.data;
+      setFolderFiles(imagesData);
+      for (let i = 0; i < imagesData.length; i++) {
+        getProxyUrl(
+          `https://drive.google.com/uc?export=view&id=${imagesData[i].id}`
+        );
+      }
     } else {
       console.log(response.data.error);
     }
+  }
+
+  async function getProxyUrl(url) {
+    const response = await axios.get(
+      `${
+        import.meta.env.VITE_BASE_URL
+      }/proxy-image?imageUrl=${encodeURIComponent(url)}`,
+      {
+        responseType: "blob",
+      }
+    );
+
+    const imageUrl = URL.createObjectURL(response.data);
+    setProxyUrl((prev) => {
+      return [...prev, imageUrl];
+    });
   }
 
   useEffect(() => {
@@ -117,14 +141,26 @@ function App() {
         <p>Pick a folde from below</p>
         {allFoldersData?.map((folder, index) => {
           return (
-            <div
-              key={index}
-              className="Folders--Folder"
-              onClick={() => {
-                getFolderFiles(folder.id);
-              }}
-            >
-              <p className="Folder_Name">{folder.name}</p>
+            <div key={index}>
+              <div
+                className="Folders--Folder"
+                onClick={() => {
+                  getFolderFiles(folder.id);
+                  setCurrentFolder(folder.id);
+                  setProxyUrl([]);
+                }}
+              >
+                <p className="Folder_Name">{folder.name}</p>
+              </div>
+            </div>
+          );
+        })}
+      </section>
+      <section className="Folder_Images">
+        {proxyUrl.map((image, index) => {
+          return (
+            <div key={index} className="Folder_Images--Image">
+              <img src={image} loading="lazy"></img>
             </div>
           );
         })}

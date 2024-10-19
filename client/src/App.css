@@ -19,3 +19,16 @@
   border-radius: 10px;
   border: 2px solid white;
 }
+
+.Folder_Images--Inactive {
+  display: none;
+}
+
+.Folder_Images--Image {
+  width: 250px;
+  margin: 1em 0em;
+}
+
+.Folder_Images--Image img {
+  width: 100%;
+}
