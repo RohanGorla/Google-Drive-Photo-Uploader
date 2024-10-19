@@ -5,6 +5,7 @@ import multer from "multer";
 import { google } from "googleapis";
 import dotenv from "dotenv";
 import { Readable } from "stream";
+import axios from "axios";
 dotenv.config();
 
 const app = express();
@@ -123,7 +124,7 @@ app.post("/getfolderfiles", async (req, res) => {
       const response = await drive.files.list({
         q: query,
         pageToken: nextPageToken,
-        fields: "nextPageToken, files(*)",
+        fields: "nextPageToken, files(id, mimeType)",
       });
       nextPageToken = response.data.nextPageToken;
       filesArray = filesArray.concat(response.data.files);
@@ -141,6 +142,31 @@ app.post("/getfolderfiles", async (req, res) => {
       errorMsg: "Error fetching folder files",
       error: error,
     });
+  }
+});
+
+/* Get Proxy Image URL */
+
+app.get("/proxy-image", async (req, res) => {
+  const { imageUrl } = req.query;
+
+  if (!imageUrl) {
+    return res.status(400).send("Image URL is required.");
+  }
+
+  try {
+    console.log(imageUrl);
+    const response = await axios.get(imageUrl, {
+      responseType: "arraybuffer",
+    });
+
+    res.setHeader("Content-Type", response.headers["content-type"]);
+    res.setHeader("Cache-Control", "public, max-age=31536000");
+
+    res.status(200).send(response.data);
+  } catch (error) {
+    console.error("Error fetching image:", error.message);
+    res.status(500).send("Failed to fetch image.");
   }
 });
 
