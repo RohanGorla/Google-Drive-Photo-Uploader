@@ -39,7 +39,6 @@ app.get("/getallfolders", async (req, res) => {
     let filesArray = [];
     let nextPageToken = null;
     const query = `'${process.env.ID}' in parents`;
-    console.log("Fetch starts!");
     do {
       const response = await drive.files.list({
         q: query,
@@ -49,7 +48,6 @@ app.get("/getallfolders", async (req, res) => {
       nextPageToken = response.data.nextPageToken;
       filesArray = filesArray.concat(response.data.files);
     } while (nextPageToken);
-    console.log("Fetch ends!");
 
     res.send({
       access: true,
@@ -107,6 +105,40 @@ app.post("/createfolder", async (req, res) => {
     res.send({
       access: false,
       errorMsg: "Folder creation failed!",
+      error: error,
+    });
+  }
+});
+
+/* Get Files From Specific Folder */
+
+app.post("/getfolderfiles", async (req, res) => {
+  try {
+    const folderId = req.body.folderId;
+    let nextPageToken = null;
+    let filesArray = [];
+
+    do {
+      const query = `'${folderId}' in parents`;
+      const response = await drive.files.list({
+        q: query,
+        pageToken: nextPageToken,
+        fields: "nextPageToken, files(*)",
+      });
+      nextPageToken = response.data.nextPageToken;
+      filesArray = filesArray.concat(response.data.files);
+    } while (nextPageToken);
+
+    res.send({
+      access: true,
+      successMsg: "Files have been fetched!",
+      data: filesArray,
+    });
+  } catch (error) {
+    console.log(error);
+    res.send({
+      access: false,
+      errorMsg: "Error fetching folder files",
       error: error,
     });
   }
