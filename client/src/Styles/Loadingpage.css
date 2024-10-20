@@ -1,6 +1,7 @@
 :root {
     --LoadingPage_GroomName: 40px;
     --LoadingPage_BrideName: 40px;
+    --LoadingPage_WelcomeMessage: 25px;
 }
 
 .LoadingPage {
@@ -13,8 +14,27 @@
     align-items: center;
 }
 
+.LoadingPage_WelcomeMessage {
+    position: absolute;
+    width: 100dvw;
+    opacity: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation-name: welcome;
+    animation-duration: 3s;
+    animation-delay: 3.5s;
+    animation-timing-function: ease-in-out;
+}
+
+.LoadingPage_WelcomeMessage p {
+    font-size: var(--LoadingPage_WelcomeMessage);
+    margin: .2em;
+}
+
 .LoadingPage_Names_Container {
-    position: relative;
+    position: absolute;
     width: 100dvw;
     height: 30dvh;
     overflow-x: hidden;
@@ -54,6 +74,15 @@
     animation-duration: 1.5s;
     animation-delay: .75s;
     scale: 0;
+}
+
+@keyframes welcome {
+    0%, 100% {
+        opacity: 0;
+    }
+    20%, 80% {
+        opacity: 1;
+    }
 }
 
 @keyframes groom {

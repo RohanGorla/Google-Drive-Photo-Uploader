@@ -10,6 +10,10 @@ function Loadingpage() {
         <FaHeart className="LoadingPage--Heart" size={100} />
         <p className="LoadingPage--GroomName">Dinesh</p>
       </div>
+      <div className="LoadingPage_WelcomeMessage">
+        <p>Welcome to our</p>
+        <p>Engagement ceremony!</p>
+      </div>
     </div>
   );
 }
