@@ -16,12 +16,12 @@ function App() {
     setAllFoldersData(getFilesResponse.data.data);
   }
 
-  useEffect(() => {
-    getAllFolders();
-    setTimeout(() => {
-      navigate("/homepage");
-    }, 4000);
-  }, []);
+  // useEffect(() => {
+  //   getAllFolders();
+  //   setTimeout(() => {
+  //     navigate("/homepage");
+  //   }, 4000);
+  // }, []);
 
   return (
     <>

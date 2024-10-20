@@ -1,0 +1,102 @@
+:root {
+    --LoadingPage_GroomName: 40px;
+    --LoadingPage_BrideName: 40px;
+}
+
+.LoadingPage {
+    background-image: linear-gradient(to bottom, #02024c, #010345, #02033e, #040336, #05022f, #05022f, #05022f, #05022f, #040336, #02033e, #010345, #02024c);
+    height: 100dvh;
+    width: 100dvw;
+    font-family: "Courgette", cursive;
+    font-style: normal;
+    display: flex;
+    align-items: center;
+}
+
+.LoadingPage_Names_Container {
+    position: relative;
+    width: 100dvw;
+    height: 30dvh;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.LoadingPage--BrideName {
+    font-size: var(--LoadingPage_GroomName);
+    font-weight: 400;
+    animation-name: bride;
+    animation-duration: 3s;
+    position: absolute;
+    right: -100dvw;
+    top: 12%;
+    z-index: 1;
+}
+
+.LoadingPage--GroomName {
+    font-size: var(--LoadingPage_BrideName);
+    font-weight: 400;
+    animation-name: groom;
+    animation-duration: 3s;
+    position: absolute;
+    left: -100dvw;
+    bottom: 12%;
+    z-index: 1;
+}
+
+.LoadingPage--Heart {
+    position: relative;
+    z-index: 0;
+    color: red;
+    animation-name: heart;
+    animation-duration: 1.5s;
+    animation-delay: .75s;
+    scale: 0;
+}
+
+@keyframes groom {
+    0% {
+        left: 100dvw;
+    }
+    30%, 70% {
+        left: 50dvw;
+    }
+    100% {
+        left: -100dvw;
+    }
+}
+
+@keyframes bride {
+    0% {
+        right: 100dvw;
+    }
+    30%, 70% {
+        right: 50dvw;
+    }
+    100% {
+        right: -100dvw;
+    }
+}
+
+@keyframes heart {
+    0% {
+        scale: 0;
+        rotate: 0deg;
+    }
+    30%, 70% {
+        scale: 1;
+        rotate: 0deg;
+    }
+    40%, 55% {
+        rotate: -25deg;
+    }
+    47.5%, 62.5% {
+        rotate: 25deg;
+    }
+    100% {
+        scale: 0;
+        rotate: 0deg;
+    }
+}
