@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import imageCompression from "browser-image-compression";
+import { FaHeart } from "react-icons/fa";
 import axios from "axios";
+import "../Styles/Homepage.css";
 
 function Homepage() {
   const context = useOutletContext();
@@ -16,6 +18,7 @@ function Homepage() {
   const [folderFiles, setFolderFiles] = useState([]);
   const [proxyUrl, setProxyUrl] = useState([]);
   const [currentImage, setCurrentImage] = useState(0);
+  const [showLoadingPage, setShowLoadingPage] = useState(true);
 
   async function handleSubmit() {
     const folderCreationResponse = await axios.post(
@@ -176,69 +179,92 @@ function Homepage() {
     }
   }, [currentImage]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setShowLoadingPage(false);
+    }, [8500]);
+  }, []);
+
   return (
-    <div className="Main">
-      <header className="Header">
-        <h1>Engagement Ceremony</h1>
-      </header>
-      <section className="Input_Form">
-        <div className="Files_Input">
-          <input
-            type="file"
-            accept="image/*"
-            name="files"
-            multiple
-            onChange={(e) => {
-              setFiles(e.target.files);
-            }}
-          ></input>
+    <div className="HomePage">
+      <div
+        className={showLoadingPage ? "LoadingPage" : "LoadingPage--Inactive"}
+      >
+        <div className="LoadingPage_Names_Container">
+          <p className="LoadingPage--BrideName">Alekhya</p>
+          <FaHeart className="LoadingPage--Heart" size={100} />
+          <p className="LoadingPage--GroomName">Dinesh</p>
         </div>
-        <div className="Name_Input">
-          <input
-            type="text"
-            onChange={(e) => {
-              setUserName(e.target.value);
-            }}
-          ></input>
+        <div className="LoadingPage_WelcomeMessage">
+          <p>Welcome to our</p>
+          <p>Engagement ceremony!</p>
         </div>
-        <button onClick={handleSubmit} className="Submit_Button">
-          Submit
-        </button>
-      </section>
-      <section className="Folders">
-        <p>Pick a folde from below</p>
-        {allFoldersData?.map((folder, index) => {
-          return (
-            <div key={index}>
-              <div
-                className="Folders--Folder"
-                onClick={() => {
-                  getFolderFiles(folder.id);
-                  setCurrentFolder(folder.id);
-                  setProxyUrl([]);
+      </div>
+      <div className="HomePage_Container">
+        <div className="Main">
+          <header className="Header">
+            <h1>Engagement Ceremony</h1>
+          </header>
+          <section className="Input_Form">
+            <div className="Files_Input">
+              <input
+                type="file"
+                accept="image/*"
+                name="files"
+                multiple
+                onChange={(e) => {
+                  setFiles(e.target.files);
                 }}
-              >
-                <p className="Folder_Name">{folder.name}</p>
-              </div>
+              ></input>
             </div>
-          );
-        })}
-      </section>
-      <section className="Folder_Images">
-        {proxyUrl.map((image, index) => {
-          return (
-            <div key={index} className="Folder_Images--Image">
-              <img
-                src={image}
-                loading="lazy"
-                onClick={() => {
-                  setCurrentImage(index);
+            <div className="Name_Input">
+              <input
+                type="text"
+                onChange={(e) => {
+                  setUserName(e.target.value);
                 }}
-              ></img>
+              ></input>
             </div>
-          );
-        })}
-      </section>
+            <button onClick={handleSubmit} className="Submit_Button">
+              Submit
+            </button>
+          </section>
+          <section className="Folders">
+            <p>Pick a folde from below</p>
+            {allFoldersData?.map((folder, index) => {
+              return (
+                <div key={index}>
+                  <div
+                    className="Folders--Folder"
+                    onClick={() => {
+                      getFolderFiles(folder.id);
+                      setCurrentFolder(folder.id);
+                      setProxyUrl([]);
+                    }}
+                  >
+                    <p className="Folder_Name">{folder.name}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </section>
+          <section className="Folder_Images">
+            {proxyUrl.map((image, index) => {
+              return (
+                <div key={index} className="Folder_Images--Image">
+                  <img
+                    src={image}
+                    loading="lazy"
+                    onClick={() => {
+                      setCurrentImage(index);
+                    }}
+                  ></img>
+                </div>
+              );
+            })}
+          </section>
+        </div>
+      </div>
     </div>
   );
 }

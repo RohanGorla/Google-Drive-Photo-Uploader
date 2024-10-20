@@ -7,6 +7,7 @@ function App() {
   const navigate = useNavigate();
 
   const [allFoldersData, setAllFoldersData] = useState([]);
+  const [showMain, setShowMain] = useState(false);
 
   async function getAllFolders() {
     const getFilesResponse = await axios.get(
@@ -16,16 +17,13 @@ function App() {
     setAllFoldersData(getFilesResponse.data.data);
   }
 
-  // useEffect(() => {
-  //   getAllFolders();
-  //   setTimeout(() => {
-  //     navigate("/homepage");
-  //   }, 4000);
-  // }, []);
+  useEffect(() => {
+    getAllFolders();
+  }, []);
 
   return (
     <>
-      <Outlet context={{ allFoldersData, setAllFoldersData }} />
+      <Outlet context={{ allFoldersData, setAllFoldersData, showMain }} />
     </>
   );
 }
