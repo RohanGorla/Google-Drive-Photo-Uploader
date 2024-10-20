@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import axios from "axios";
 import imageCompression from "browser-image-compression";
 import "./App.css";
 
 function App() {
+  const navigate = useNavigate();
+
   const [files, setFiles] = useState([]);
   const [userName, setUserName] = useState("");
   const [allFoldersData, setAllFoldersData] = useState([]);
@@ -185,9 +188,17 @@ function App() {
 
   return (
     <div className="Main">
+      <Outlet />
       <header className="Header">
         <h1>Engagement Ceremony</h1>
       </header>
+      <button
+        onClick={() => {
+          navigate("test");
+        }}
+      >
+        Navigate
+      </button>
       <section className="Input_Form">
         <div className="Files_Input">
           <input
