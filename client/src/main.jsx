@@ -9,13 +9,15 @@ import {
 import "./index.css";
 
 import App from "./App.jsx";
-import Test from "./Components/Test.jsx";
+import Homepage from "./Components/Homepage.jsx";
+import Loadingpage from "./Components/Loadingpage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<App />}>
-        <Route path="/test" element={<Test />} />
+        <Route path="" element={<Loadingpage />} />
+        <Route path="/homepage" element={<Homepage />} />
       </Route>
     </>
   )
