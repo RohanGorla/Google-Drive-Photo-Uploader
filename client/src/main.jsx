@@ -10,14 +10,12 @@ import "./index.css";
 
 import App from "./App.jsx";
 import Homepage from "./Components/Homepage.jsx";
-import Loadingpage from "./Components/Loadingpage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<App />}>
         <Route path="" element={<Homepage />} />
-        {/* <Route path="/homepage" element={<Homepage />} /> */}
       </Route>
     </>
   )
