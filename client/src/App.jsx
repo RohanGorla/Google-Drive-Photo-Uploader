@@ -81,13 +81,13 @@ function App() {
       setFolderFiles(imagesData);
       if (imagesData.length <= 5) {
         for (let i = 0; i < imagesData.length; i++) {
-          let response = await getProxyUrl(
+          getProxyUrl(
             `https://drive.google.com/uc?export=view&id=${imagesData[i].id}`
           );
         }
       } else {
         for (let i = 0; i < 5; i++) {
-          let response = await getProxyUrl(
+          getProxyUrl(
             `https://drive.google.com/uc?export=view&id=${imagesData[i].id}`
           );
         }
@@ -98,19 +98,57 @@ function App() {
   }
 
   async function getProxyUrl(url) {
-    const response = await axios.get(
-      `${
-        import.meta.env.VITE_BASE_URL
-      }/proxy-image?imageUrl=${encodeURIComponent(url)}&timestamp=${Date.now()}`,
-      {
-        responseType: "blob",
-      }
-    );
+    try {
+      const response = await axios.get(
+        `${
+          import.meta.env.VITE_BASE_URL
+        }/proxy-image?imageUrl=${encodeURIComponent(url)}`,
+        {
+          responseType: "blob",
+        }
+      );
 
-    const imageUrl = URL.createObjectURL(response.data);
-    setProxyUrl((prev) => {
-      return [...prev, imageUrl];
-    });
+      if (
+        response.data.size > 0 &&
+        response.data.type.split("/")[0] == "image"
+      ) {
+        const imageUrl = URL.createObjectURL(response.data);
+        setProxyUrl((prev) => {
+          return [...prev, imageUrl];
+        });
+      } else {
+        getNewProxyUrl(url);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function getNewProxyUrl(url) {
+    try {
+      const response = await axios.get(
+        `${
+          import.meta.env.VITE_BASE_URL
+        }/proxy-image?imageUrl=${encodeURIComponent(
+          url
+        )}&timestamp=${Date.now()}`,
+        {
+          responseType: "blob",
+        }
+      );
+
+      if (
+        response.data.size > 0 &&
+        response.data.type.split("/")[0] == "image"
+      ) {
+        const imageUrl = URL.createObjectURL(response.data);
+        setProxyUrl((prev) => {
+          return [...prev, imageUrl];
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async function getNextImages(currentImageIndex) {
@@ -122,13 +160,13 @@ function App() {
         i < currentImageIndex + maxLoad + 1;
         i++
       ) {
-        let response = await getProxyUrl(
+        getProxyUrl(
           `https://drive.google.com/uc?export=view&id=${folderFiles[i].id}`
         );
       }
     } else if (currentImageIndex + maxLoad >= totalImagesCount - 1) {
       for (let i = currentImageIndex + 1; i < totalImagesCount; i++) {
-        let response = await getProxyUrl(
+        getProxyUrl(
           `https://drive.google.com/uc?export=view&id=${folderFiles[i].id}`
         );
       }

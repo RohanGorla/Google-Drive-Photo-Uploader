@@ -151,34 +151,26 @@ app.get("/proxy-image", async (req, res) => {
   const { imageUrl } = req.query;
 
   if (!imageUrl) {
-    return res.status(400).send("Image URL is required.");
-    // return res.send({ access: false, errorMsg: "Image URL is required!" });
+    return res.send("Image URL is required!");
   }
-
-  console.log("hello");
 
   try {
     const response = await axios.get(imageUrl, {
       responseType: "arraybuffer",
     });
+    
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader(
       "Access-Control-Allow-Headers",
       "Origin, X-Requested-With, Content-Type, Accept"
     );
     res.setHeader("Content-Type", response.headers["content-type"]);
-    // res.setHeader("Cache-Control", "public, max-age=31536000");
+    res.setHeader("Cache-Control", "public, max-age=31536000");
 
-    res.status(200).send(response.data);
-    // res.send({ access: true, data: response.data });
+    res.send(response.data);
   } catch (error) {
     console.error("Error fetching image:", error.message);
-    res.status(500).send("Failed to fetch image.");
-    // res.send({
-    //   access: false,
-    //   errorMsg: "Failed to fetch image!",
-    //   error: error,
-    // });
+    res.send("Failed to fetch image!");
   }
 });
 
