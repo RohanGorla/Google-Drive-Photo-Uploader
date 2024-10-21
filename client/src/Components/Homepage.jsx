@@ -15,6 +15,7 @@ function Homepage() {
   const [greetingNote, setGreetingNote] = useState("");
   const [userNameError, setUserNameError] = useState(false);
   const [filesQuantityError, setFilesQuantityError] = useState(false);
+  const [startUpload, setStartUpload] = useState(false);
   const uploadRef = useRef(null);
   const message =
     "Thank you for being part of our special day! Your presence means the world to us as we begin this exciting journey together. We hope you enjoyed the celebration as much as we did. Please share your captured moments with us by uploading your photos below!";
@@ -206,10 +207,16 @@ function Homepage() {
               </div>
               <div
                 className="HomePage_Upload_Submit_Button"
-                onClick={handleSubmit}
-                // onClick={() => {
-                //   console.log("click");
-                // }}
+                // onClick={handleSubmit}
+                onClick={() => {
+                  if (startUpload) {
+                    console.log("already started");
+                  } else {
+                    console.log("Start upload");
+                    setStartUpload(true);
+                    handleSubmit();
+                  }
+                }}
               >
                 <MdUpload size={22} /> <span>Upload</span>
               </div>
