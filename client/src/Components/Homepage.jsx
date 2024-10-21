@@ -10,6 +10,9 @@ function Homepage() {
   const [files, setFiles] = useState([]);
   const [userName, setUserName] = useState("");
   const [showLoadingPage, setShowLoadingPage] = useState(true);
+  const [greetingNote, setGreetingNote] = useState("");
+  const message =
+    "Thank you for being part of our special day! Your presence means the world to us as we begin this exciting journey together. We hope you enjoyed the celebration as much as we did. Please share your captured moments with us by uploading your photos below!";
 
   async function handleSubmit() {
     const folderCreationResponse = await axios.post(
@@ -60,9 +63,26 @@ function Homepage() {
     }
   }
 
+  /* Greeting Note Typing Effect */
+  useEffect(() => {
+    if (greetingNote.length) {
+      setTimeout(() => {
+        if (greetingNote.length === message.length) {
+          setTimeout(() => {
+            setGreetingNote(message[0]);
+          }, 3000);
+        } else {
+          let updatedMessage = greetingNote + message[greetingNote.length];
+          setGreetingNote(updatedMessage);
+        }
+      }, 70);
+    }
+  }, [greetingNote]);
+
   useEffect(() => {
     setTimeout(() => {
       setShowLoadingPage(false);
+      setGreetingNote(message[0]);
     }, [8500]);
   }, []);
 
@@ -101,6 +121,13 @@ function Homepage() {
       </nav>
       {/* Home Page Main Container */}
       <div className="HomePage_MainContainer">
+        {/* Home Page Greeting Card */}
+        <article className="HomePage_Greetings_Container">
+          <div className="HomePage_Greetings">
+            <div className="HomePage_Greetings--Tint"></div>
+            <p className="HomePage_Greetings--Note">{greetingNote}</p>
+          </div>
+        </article>
         <section className="Input_Form">
           <div className="Files_Input">
             <input

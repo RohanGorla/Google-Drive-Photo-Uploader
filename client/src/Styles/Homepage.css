@@ -11,35 +11,7 @@
     padding: .3em;
 }
 
-.HomePage_Background {
-    position: absolute;
-    z-index: -2;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.HomePage_Background--Tint {
-    position: absolute;
-    z-index: -1;
-    width: 100%;
-    height: 100%;
-    background-color: black;
-    opacity: .3;
-}
-
-.HomePage_Background img {
-    position: absolute;
-    z-index: -2;
-    width: 97%;
-    height: 98%;
-    border-style: none;
-    border-radius: 10px;
-}
+/* Loading Page */
 
 .LoadingPage--Inactive {
     display: none;
@@ -190,6 +162,40 @@
     }
 }
 
+/* Background Image */
+
+.HomePage_Background {
+    position: absolute;
+    z-index: -2;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.HomePage_Background--Tint {
+    position: absolute;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: .3;
+}
+
+.HomePage_Background img {
+    position: absolute;
+    z-index: -2;
+    width: 97%;
+    height: 98%;
+    border-style: none;
+    border-radius: 10px;
+}
+
+/* Navbar */
+
 .HomePage_Navbar {
     position: sticky;
     width: 100%;
@@ -212,6 +218,8 @@
     width: 100%;
     height: 100%;
 }
+
+/* View Gallery Button */
 
 .HomePage_Navbar_ViewGallery_Button {
     background-color: grey;
@@ -278,4 +286,41 @@
     height: calc(100% - 80px);
     width: 100%;
     overflow-y: scroll;
+}
+
+/* Greeting Card */
+
+.HomePage_Greetings_Container {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: end;
+    padding: 0em .5em;
+    padding-bottom: 6em;
+}
+
+.HomePage_Greetings {
+    position: relative;
+    padding: 2em 1em;
+}
+
+.HomePage_Greetings--Tint {
+    background-color: black;
+    position: absolute;
+    z-index: 2;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    opacity: .7;
+    border-style: none;
+    border-radius: 20px;
+}
+
+.HomePage_Greetings--Note {
+    position: relative;
+    z-index: 3;
+    line-height: 1.8;
 }
