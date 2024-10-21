@@ -2,13 +2,16 @@
     --LoadingPage_GroomName: 40px;
     --LoadingPage_BrideName: 40px;
     --LoadingPage_WelcomeMessage: 25px;
+    --HomePage_Upload_Container--Note: 16px;
+    --Folder_Name--Input: 15px;
+    --Upload_Buttons_Text: 14px;
 }
 
 .HomePage {
     position: relative;
     height: 100dvh;
     width: 100dvw;
-    padding: .3em;
+    padding: .7em;
 }
 
 /* Loading Page */
@@ -297,7 +300,7 @@
     height: 100%;
     display: flex;
     align-items: end;
-    padding: 0em .5em;
+    /* padding: 0em .5em; */
     padding-bottom: 6em;
 }
 
@@ -323,4 +326,111 @@
     position: relative;
     z-index: 3;
     line-height: 1.8;
+}
+
+/* Image Uploads */
+
+.HomePage_Upload_Container {
+    position: relative;
+    z-index: 3;
+    padding: 1em;
+}
+
+.HomePage_Upload_Container--Tint {
+    background-color: black;
+    position: absolute;
+    z-index: 2;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    opacity: .8;
+    border-style: none;
+    border-radius: 20px;
+}
+
+.HomePage_Upload_Container--Note {
+    font-size: var(--HomePage_Upload_Container--Note);
+    line-height: 1.3;
+    position: relative;
+    z-index: 3;
+    margin-bottom: 1.5em;
+}
+
+.HomePage_Upload_Folder_Name {
+    position: relative;
+    z-index: 3;
+}
+
+.HomePage_Upload_Folder_Name--Label {
+    display: block;
+}
+
+.HomePage_Upload_Folder_Name--Input {
+    font-size: var(--Folder_Name--Input);
+    width: 200px;
+    padding: .5em .5em .2em .4em;
+    margin-top: .3em;
+    border-style: none;
+    border: 0px;
+    border-radius: 3px;
+}
+
+.HomePage_Upload_Select_And_Upload_Container {
+    margin-top: 1em;
+}
+
+.HomePage_Upload_Select_And_Upload--Label {
+    position: relative;
+    z-index: 3;
+    margin-bottom: .5em;
+}
+
+.HomePage_Upload_Select_And_Upload {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    gap: 1em;
+}
+
+.HomePage_Upload_Image_Selector {
+    
+}
+
+.HomePage_Upload_Image_Selector--Label {
+    display: flex;
+    align-items: center;
+    gap: .5em;
+    padding: .6em 1.6em;
+    border-style: none;
+    border: 2px solid white;
+    border-radius: 8px;
+}
+
+.HomePage_Upload_Submit_Button {
+    display: flex;
+    align-items: center;
+    gap: .5em;
+    padding: .6em 1.6em;
+    border-style: none;
+    border: 2px solid white;
+    border-radius: 8px;
+}
+
+.HomePage_Upload_Submit_Button span,
+.HomePage_Upload_Image_Selector--Label span {
+    font-size: var(--Upload_Buttons_Text);
+}
+
+.HomePage_Upload_Image_Select_Empty,
+.HomePage_Upload_Folder_Name_Empty {
+    color: red;
+    position: relative;
+    z-index: 3;
+    margin-top: .4em;
+}
+
+.HomePage_Upload_Image_Select_Empty--Inactive,
+.HomePage_Upload_Folder_Name_Empty--Inactive {
+    display: none;
 }
