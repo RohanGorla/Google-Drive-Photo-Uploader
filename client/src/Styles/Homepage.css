@@ -8,6 +8,37 @@
     position: relative;
     height: 100dvh;
     width: 100dvw;
+    padding: .3em;
+}
+
+.HomePage_Background {
+    position: absolute;
+    z-index: -2;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.HomePage_Background--Tint {
+    position: absolute;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: .3;
+}
+
+.HomePage_Background img {
+    position: absolute;
+    z-index: -2;
+    width: 97%;
+    height: 98%;
+    border-style: none;
+    border-radius: 10px;
 }
 
 .LoadingPage--Inactive {
@@ -22,9 +53,9 @@
     opacity: 0;
     top: 0px;
     left: 0px;
-    z-index: 5;
-    height: 100dvh;
-    width: 100dvw;
+    z-index: 10;
+    height: 100%;
+    width: 100%;
     font-family: "Courgette", cursive;
     font-style: normal;
     align-items: center;
@@ -34,7 +65,7 @@
 
 .LoadingPage_WelcomeMessage {
     position: absolute;
-    width: 100dvw;
+    width: 100%;
     opacity: 0;
     text-align: center;
     display: flex;
@@ -53,7 +84,7 @@
 
 .LoadingPage_Names_Container {
     position: absolute;
-    width: 100dvw;
+    width: 100%;
     height: 30dvh;
     overflow-x: hidden;
     display: flex;
@@ -71,7 +102,7 @@
     position: absolute;
     right: -100dvw;
     top: 12%;
-    z-index: 1;
+    z-index: 9;
 }
 
 .LoadingPage--GroomName {
@@ -83,12 +114,12 @@
     position: absolute;
     left: -100dvw;
     bottom: 12%;
-    z-index: 1;
+    z-index: 9;
 }
 
 .LoadingPage--Heart {
     position: relative;
-    z-index: 0;
+    z-index: 8;
     color: red;
     animation-name: heart;
     animation-duration: 1.5s;
@@ -159,8 +190,92 @@
     }
 }
 
-.HomePage_Container {
+.HomePage_Navbar {
+    position: sticky;
+    width: 100%;
+    height: 80px;
+    top: 0px;
+    left: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    padding: 1em;
+}
+
+.HomePage_Navbar--Tint {
+    background-color: black;
+    opacity: .5;
+    position: absolute;
+    z-index: 6;
+    top: 0px;
+    left: 0px;
+    width: 100%;
     height: 100%;
+}
+
+.HomePage_Navbar_ViewGallery_Button {
+    background-color: grey;
+    position: relative;
+    bottom: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 140px;
+    overflow-x: hidden;
+    z-index: 7;
+    padding: .6em 1.8em;
+    border-style: none;
+    border-radius: 8px;
+    box-shadow: 4px 4px black;
+    animation-name: Gallery-Button;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes Gallery-Button {
+    0%, 10%, 20%, 100% {
+        bottom: 0px;
+    }
+    5%, 15% {
+        bottom: 3px;
+    }
+}
+
+.HomePage_Navbar_ViewGallery_Button--Background {
+    background-image: linear-gradient(to right, #150118, #250c2d, #380f43, #4c105b, #610f73, #610f73, #610f73, #610f73, #4c105b, #380f43, #250c2d, #150118);
+    position: absolute;
+    z-index: 2;
+    top: 0px;
+    left: 0px;
+    width: 500px;
+    height: 100%;
+    animation-name: Gallery-Button-Background;
+    animation-duration: 8s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes Gallery-Button-Background {
+    0%, 50%, 100% {
+        left: 0px;
+    }
+    25%, 75% {
+        left: -360px;
+    }
+}
+
+.HomePage_Navbar_ViewGallery_Button--Icon {
+    position: relative;
+    z-index: 3;
+    margin-right: .5em;
+}
+
+.HomePage_Navbar_ViewGallery_Button--Text {
+    position: relative;
+    z-index: 3;
+}
+
+.HomePage_MainContainer {
+    height: calc(100% - 80px);
     width: 100%;
     overflow-y: scroll;
 }

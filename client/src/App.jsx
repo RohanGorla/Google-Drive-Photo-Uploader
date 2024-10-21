@@ -1,13 +1,10 @@
 import { useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import axios from "axios";
 import "./App.css";
 
 function App() {
-  const navigate = useNavigate();
-
   const [allFoldersData, setAllFoldersData] = useState([]);
-  const [showMain, setShowMain] = useState(false);
 
   async function getAllFolders() {
     const getFilesResponse = await axios.get(
@@ -23,7 +20,7 @@ function App() {
 
   return (
     <>
-      <Outlet context={{ allFoldersData, setAllFoldersData, showMain }} />
+      <Outlet context={{ allFoldersData, setAllFoldersData }} />
     </>
   );
 }
