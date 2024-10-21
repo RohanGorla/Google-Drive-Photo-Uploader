@@ -289,6 +289,7 @@
     height: calc(100% - 80px);
     width: 100%;
     overflow-y: scroll;
+    padding-bottom: 3em;
 }
 
 /* Greeting Card */
@@ -301,7 +302,7 @@
     display: flex;
     align-items: end;
     /* padding: 0em .5em; */
-    padding-bottom: 6em;
+    padding-bottom: 2em;
 }
 
 .HomePage_Greetings {
@@ -330,10 +331,15 @@
 
 /* Image Uploads */
 
+.HomePage_Upload_Container--Inactive {
+    display: none;
+}
+
 .HomePage_Upload_Container {
     position: relative;
     z-index: 3;
     padding: 1em;
+    margin-top: 3em;
 }
 
 .HomePage_Upload_Container--Tint {
@@ -429,4 +435,103 @@
 .HomePage_Upload_Image_Select_Empty--Inactive,
 .HomePage_Upload_Folder_Name_Empty--Inactive {
     display: none;
+}
+
+/* Gallery Container */
+
+.HomePage_Gallery_Container--Inactive {
+    display: none;
+}
+
+.HomePage_Gallery_Container {
+    position: relative;
+    z-index: 3;
+    padding: 1em;
+    margin-top: 3em;
+}
+
+.HomePage_Gallery_Container--Tint {
+    background-color: black;
+    position: absolute;
+    z-index: 2;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    opacity: .8;
+    border-style: none;
+    border-radius: 20px;
+}
+
+.HomePage_Gallery--Note {
+    position: relative;
+    z-index: 3;
+}
+
+.HomePage_Gallery_Button_Container {
+    display: flex;
+}
+
+.HomePage_Gallery_Button {
+    /* background-color: grey; */
+    position: relative;
+    bottom: 0px;
+    display: flex;
+    align-items: center;
+    gap: .5em;
+    /* width: 140px; */
+    overflow-x: hidden;
+    z-index: 3;
+    padding: .6em 1.6em;
+    border-style: none;
+    border: 2px solid white;
+    border-radius: 8px;
+    margin-top: 2em;
+    /* box-shadow: 4px 4px black;
+    animation-name: Gallery-Button;
+    animation-duration: 4s;
+    animation-iteration-count: infinite; */
+}
+/* 
+@keyframes Gallery-Button {
+    0%, 10%, 20%, 100% {
+        bottom: 0px;
+    }
+    5%, 15% {
+        bottom: 3px;
+    }
+} */
+
+/* .HomePage_Gallery_Button--Background {
+    background-image: linear-gradient(to right, #150118, #250c2d, #380f43, #4c105b, #610f73, #610f73, #610f73, #610f73, #4c105b, #380f43, #250c2d, #150118);
+    position: absolute;
+    z-index: 2;
+    top: 0px;
+    left: 0px;
+    width: 500px;
+    height: 100%;
+    animation-name: Gallery-Button-Background;
+    animation-duration: 8s;
+    animation-iteration-count: infinite;
+} */
+
+/* @keyframes Gallery-Button-Background {
+    0%, 50%, 100% {
+        left: 0px;
+    }
+    25%, 75% {
+        left: -360px;
+    }
+} */
+
+.HomePage_Gallery_Button--Icon {
+    position: relative;
+    z-index: 3;
+    margin-right: .5em;
+}
+
+.HomePage_Gallery_Button--Text {
+    font-size: var(--Upload_Buttons_Text);
+    position: relative;
+    z-index: 3;
 }

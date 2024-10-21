@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useLocation } from "react-router-dom";
 import axios from "axios";
 
 function Gallery() {
@@ -12,6 +12,7 @@ function Gallery() {
   const [folderFiles, setFolderFiles] = useState([]);
   const [proxyUrl, setProxyUrl] = useState([]);
   const [currentImage, setCurrentImage] = useState(0);
+  const location = useLocation();
 
   async function getFolderFiles(id) {
     const response = await axios.post(
@@ -122,6 +123,10 @@ function Gallery() {
       getNextImages(currentImage);
     }
   }, [currentImage]);
+
+  useEffect(() => {
+    sessionStorage.setItem("prevLoc", location.key);
+  }, []);
 
   return (
     <>

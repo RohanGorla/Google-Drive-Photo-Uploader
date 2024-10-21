@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import { FaImages } from "react-icons/fa";
 import { MdUpload } from "react-icons/md";
@@ -13,12 +14,17 @@ function Homepage() {
   const [userName, setUserName] = useState("");
   const [showLoadingPage, setShowLoadingPage] = useState(true);
   const [greetingNote, setGreetingNote] = useState("");
+  const [scrollToUploadForm, setScrollToUploadForm] = useState(false);
   const [userNameError, setUserNameError] = useState(false);
   const [filesQuantityError, setFilesQuantityError] = useState(false);
   const [startUpload, setStartUpload] = useState(false);
   const uploadRef = useRef(null);
+  const navigate = useNavigate();
+  const location = useLocation();
   const message =
     "Thank you for being part of our special day! Your presence means the world to us as we begin this exciting journey together. We hope you enjoyed the celebration as much as we did. Please share your captured moments with us by uploading your photos below!";
+
+  /* Create Folder And Upload Images APIs */
 
   async function handleSubmit() {
     if (userName.length && files.length) {
@@ -86,13 +92,10 @@ function Homepage() {
 
   /* Greeting Note Typing Effect */
   useEffect(() => {
+    console.log("In animation, length ->", greetingNote.length);
     if (greetingNote.length) {
       setTimeout(() => {
-        if (greetingNote.length === message.length) {
-          // setTimeout(() => {
-          // setGreetingNote(message);
-          // }, 3000);
-        } else {
+        if (greetingNote.length !== message.length) {
           let updatedMessage = greetingNote + message[greetingNote.length];
           setGreetingNote(updatedMessage);
         }
@@ -101,14 +104,38 @@ function Homepage() {
   }, [greetingNote]);
 
   useEffect(() => {
-    setTimeout(() => {
+    console.log("Inside main");
+    const previousPath = sessionStorage.getItem("prevLoc");
+    // const alreadyVisited = sessionStorage.getItem("visited");
+    if (previousPath && previousPath !== location.key) {
+      console.log("Inside");
       setShowLoadingPage(false);
       setGreetingNote(message[0]);
-    }, [8500]);
-    const scrollDelay = message.length * 20 + 1000 + 8500;
-    setTimeout(() => {
-      uploadRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, scrollDelay);
+      setTimeout(() => {
+        sessionStorage.setItem("prevLoc", location.key);
+      }, 1000);
+      const scrollDelay = message.length * 20 + 2000 + 1000;
+      setTimeout(() => {
+        uploadRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, scrollDelay);
+      setTimeout(() => {
+        setScrollToUploadForm(true);
+      }, scrollDelay - 50);
+    } else {
+      console.log("inside else");
+      setTimeout(() => {
+        sessionStorage.setItem("prevLoc", location.key);
+        setShowLoadingPage(false);
+        setGreetingNote(message[0]);
+      }, [8500]);
+      const scrollDelay = message.length * 20 + 2000 + 8500;
+      setTimeout(() => {
+        uploadRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, scrollDelay);
+      setTimeout(() => {
+        setScrollToUploadForm(true);
+      }, scrollDelay - 50);
+    }
   }, []);
 
   return (
@@ -134,7 +161,7 @@ function Homepage() {
       </div>
       {/* Home Page Navbar */}
       <nav className="HomePage_Navbar">
-        {/* <div className="HomePage_Navbar--Tint"></div> */}
+        {/* <div className="HomePage_Navbar--Tint"></div>
         <div className="HomePage_Navbar_ViewGallery_Button">
           <div className="HomePage_Navbar_ViewGallery_Button--Background"></div>
           <FaImages
@@ -142,7 +169,7 @@ function Homepage() {
             size={20}
           />
           <p className="HomePage_Navbar_ViewGallery_Button--Text">Gallery</p>
-        </div>
+        </div> */}
       </nav>
       {/* Home Page Main Container */}
       <div className="HomePage_MainContainer">
@@ -153,12 +180,21 @@ function Homepage() {
             <p className="HomePage_Greetings--Note">{greetingNote}</p>
           </div>
         </article>
-        <section className="HomePage_Upload_Container" ref={uploadRef}>
+        {/* Home Page Image Upload-Form */}
+        <section
+          className={
+            scrollToUploadForm
+              ? "HomePage_Upload_Container"
+              : "HomePage_Upload_Container--Inactive"
+          }
+          ref={uploadRef}
+        >
           <div className="HomePage_Upload_Container--Tint"></div>
           <p className="HomePage_Upload_Container--Note">
             Share your cherished moments from the event, so we can treasure them
             for years to come!
           </p>
+          {/* Folder Name Input */}
           <div className="HomePage_Upload_Folder_Name">
             <label className="HomePage_Upload_Folder_Name--Label">
               Your Name:
@@ -172,6 +208,7 @@ function Homepage() {
               }}
             ></input>
           </div>
+          {/* Folder Name Empty Error Message */}
           <p
             className={
               userNameError
@@ -181,11 +218,13 @@ function Homepage() {
           >
             * Your name is required for folder creation!
           </p>
+          {/* Select And Upload Images Container */}
           <div className="HomePage_Upload_Select_And_Upload_Container">
             <p className="HomePage_Upload_Select_And_Upload--Label">
               Select & Upload your images:
             </p>
             <div className="HomePage_Upload_Select_And_Upload">
+              {/* Select Images Button */}
               <div className="HomePage_Upload_Image_Selector">
                 <label
                   className="HomePage_Upload_Image_Selector--Label"
@@ -205,9 +244,9 @@ function Homepage() {
                   style={{ display: "none" }}
                 ></input>
               </div>
+              {/* Upload Images Button */}
               <div
                 className="HomePage_Upload_Submit_Button"
-                // onClick={handleSubmit}
                 onClick={() => {
                   if (startUpload) {
                     console.log("already started");
@@ -222,6 +261,7 @@ function Homepage() {
               </div>
             </div>
           </div>
+          {/* No Images Selected Error */}
           <p
             className={
               filesQuantityError
@@ -231,6 +271,32 @@ function Homepage() {
           >
             * Please select atleast 1 image!
           </p>
+        </section>
+        {/* Home Page Gallery */}
+        <section
+          className={
+            scrollToUploadForm
+              ? "HomePage_Gallery_Container"
+              : "HomePage_Gallery_Container--Inactive"
+          }
+        >
+          <div className="HomePage_Gallery_Container--Tint"></div>
+          <p className="HomePage_Gallery--Note">
+            The best moments are those shared. Open the gallery to explore
+            photos that hold the joy and excitement of the day!
+          </p>
+          <div className="HomePage_Gallery_Button_Container">
+            {/* <div className="HomePage_Gallery_Button--Background"></div> */}
+            <div
+              className="HomePage_Gallery_Button"
+              onClick={() => {
+                navigate("/gallery");
+              }}
+            >
+              <FaImages className="HomePage_Gallery_Button--Icon" size={22} />
+              <p className="HomePage_Gallery_Button--Text">Gallery</p>
+            </div>
+          </div>
         </section>
       </div>
     </div>
