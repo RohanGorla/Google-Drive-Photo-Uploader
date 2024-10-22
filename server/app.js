@@ -27,6 +27,17 @@ const auth = new google.auth.JWT(process.env.CE, null, process.env.PK, [
 
 const drive = google.drive({ version: "v3", auth: auth });
 
+async function deleteFolder(fileId) {
+  try {
+    await drive.files.delete({ fileId });
+    console.log(`Successfully deleted file/folder with ID: ${fileId}`);
+  } catch (error) {
+    console.error("Error deleting the file/folder:", error.message);
+  }
+}
+
+// deleteFolder("1rWB8pOGB53bHDQDRPrMDqcbV7fFEKdnd");
+
 /* Basic Get API */
 
 app.get("/", (req, res) => {
@@ -111,6 +122,8 @@ app.post("/createfolder", async (req, res) => {
   }
 });
 
+app.delete("/delete", async (req, res) => {});
+
 /* Get Files From Specific Folder */
 
 app.post("/getfolderfiles", async (req, res) => {
@@ -142,35 +155,6 @@ app.post("/getfolderfiles", async (req, res) => {
       errorMsg: "Error fetching folder files",
       error: error,
     });
-  }
-});
-
-/* Get Proxy Image URL */
-
-app.get("/proxy-image", async (req, res) => {
-  const { imageUrl } = req.query;
-
-  if (!imageUrl) {
-    return res.send("Image URL is required!");
-  }
-
-  try {
-    const response = await axios.get(imageUrl, {
-      responseType: "arraybuffer",
-    });
-    
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept"
-    );
-    res.setHeader("Content-Type", response.headers["content-type"]);
-    res.setHeader("Cache-Control", "public, max-age=31536000");
-
-    res.send(response.data);
-  } catch (error) {
-    console.error("Error fetching image:", error.message);
-    res.send("Failed to fetch image!");
   }
 });
 
@@ -233,6 +217,35 @@ app.post("/upload", upload.single("files"), async (req, res) => {
       errorMsg: "File upload failed",
       error: error.message,
     });
+  }
+});
+
+/* Get Proxy Image URL */
+
+app.get("/proxy-image", async (req, res) => {
+  const { imageUrl } = req.query;
+
+  if (!imageUrl) {
+    return res.send("Image URL is required!");
+  }
+
+  try {
+    const response = await axios.get(imageUrl, {
+      responseType: "arraybuffer",
+    });
+
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    res.setHeader("Content-Type", response.headers["content-type"]);
+    res.setHeader("Cache-Control", "public, max-age=31536000");
+
+    res.send(response.data);
+  } catch (error) {
+    console.error("Error fetching image:", error.message);
+    res.send("Failed to fetch image!");
   }
 });
 
