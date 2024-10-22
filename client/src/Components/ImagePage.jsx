@@ -1,17 +1,18 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
+import { MdDownload } from "react-icons/md";
 import axios from "axios";
 import "../Styles/ImagePage.css";
 
 function ImagePage() {
   const [folderFiles, setFolderFiles] = useState([]);
   const [proxyUrl, setProxyUrl] = useState([]);
-  const [currentImage, setCurrentImage] = useState(0);
-  const trackerLimit = 4;
+  const trackerLimit = 5;
   const [tracker, setTracker] = useState(-1);
   const folderId = useParams().id;
   const maxLoad = 10;
-  const imageRef = useRef();
+  const imageRef = useRef(null);
+  const scrollRef = useRef(null);
 
   async function getInitialImages(id) {
     const response = await axios.post(
@@ -26,7 +27,8 @@ function ImagePage() {
       if (imagesData.length <= maxLoad) {
         for (let i = 0; i < imagesData.length; i++) {
           getProxyUrl(
-            `https://drive.google.com/uc?export=view&id=${imagesData[i].id}`
+            `https://drive.google.com/uc?export=view&id=${imagesData[i].id}`,
+            imagesData[i]
           );
         }
       } else {
@@ -36,7 +38,8 @@ function ImagePage() {
         });
         for (let i = 0; i < maxLoad; i++) {
           getProxyUrl(
-            `https://drive.google.com/uc?export=view&id=${imagesData[i].id}`
+            `https://drive.google.com/uc?export=view&id=${imagesData[i].id}`,
+            imagesData[i]
           );
         }
       }
@@ -45,7 +48,7 @@ function ImagePage() {
     }
   }
 
-  async function getProxyUrl(url) {
+  async function getProxyUrl(url, imageData) {
     try {
       const response = await axios.get(
         `${
@@ -61,8 +64,9 @@ function ImagePage() {
         response.data.type.split("/")[0] == "image"
       ) {
         const imageUrl = URL.createObjectURL(response.data);
+        const data = { url: imageUrl, imageData };
         setProxyUrl((prev) => {
-          return [...prev, imageUrl];
+          return [...prev, data];
         });
       } else {
         getNewProxyUrl(url);
@@ -72,7 +76,7 @@ function ImagePage() {
     }
   }
 
-  async function getNewProxyUrl(url) {
+  async function getNewProxyUrl(url, imageData) {
     try {
       const response = await axios.get(
         `${
@@ -90,8 +94,9 @@ function ImagePage() {
         response.data.type.split("/")[0] == "image"
       ) {
         const imageUrl = URL.createObjectURL(response.data);
+        const data = { url: imageUrl, imageData };
         setProxyUrl((prev) => {
-          return [...prev, imageUrl];
+          return [...prev, data];
         });
       }
     } catch (error) {
@@ -108,13 +113,15 @@ function ImagePage() {
         i++
       ) {
         getProxyUrl(
-          `https://drive.google.com/uc?export=view&id=${folderFiles[i].id}`
+          `https://drive.google.com/uc?export=view&id=${folderFiles[i].id}`,
+          folderFiles[i]
         );
       }
     } else if (currentImageIndex + maxLoad >= totalImagesCount - 1) {
       for (let i = currentImageIndex + 1; i < totalImagesCount; i++) {
         getProxyUrl(
-          `https://drive.google.com/uc?export=view&id=${folderFiles[i].id}`
+          `https://drive.google.com/uc?export=view&id=${folderFiles[i].id}`,
+          folderFiles[i]
         );
       }
     }
@@ -123,6 +130,7 @@ function ImagePage() {
   function updateTracker() {
     if (proxyUrl.length !== folderFiles.length) {
       if (tracker + trackerLimit < folderFiles.length) {
+        console.log("change");
         setTracker((prev) => {
           const newTracker = prev + maxLoad;
           return newTracker;
@@ -131,12 +139,28 @@ function ImagePage() {
     }
   }
 
+  function downloadImage(url, name) {
+    const downloadButton = document.createElement("a");
+    downloadButton.href = url;
+    downloadButton.download = name;
+    document.body.appendChild(downloadButton);
+
+    downloadButton.click();
+
+    document.body.removeChild(downloadButton);
+  }
+
   useEffect(() => {
-    getInitialImages(folderId);
+    // getInitialImages(folderId);
   }, []);
 
   return (
-    <div className="ImagePage">
+    <div
+      className="ImagePage"
+      onClick={() => {
+        getInitialImages(folderId);
+      }}
+    >
       <div
         className="ImagePage_Images"
         onScroll={() => {
@@ -152,17 +176,34 @@ function ImagePage() {
         {proxyUrl.map((image, index) => {
           return (
             <div
-              key={index}
-              ref={index == tracker ? imageRef : null}
               className="ImagePage_Images--Image_Container"
+              key={index}
+              ref={(e) => {
+                if (index == tracker) {
+                  imageRef.current = e;
+                }
+              }}
             >
-              <img
-                src={image}
-                loading="lazy"
-                onClick={() => {
-                  setCurrentImage(index);
-                }}
-              ></img>
+              <div className="ImagePage_Images--Buttons">
+                <div
+                  className="Image_Buttons_Download"
+                  onClick={() => {
+                    downloadImage(
+                      image.imageData.webContentLink,
+                      image.imageData.name
+                    );
+                  }}
+                >
+                  <MdDownload
+                    className="Image_Buttons_Download--Icon"
+                    size={22}
+                  />
+                  <span className="Image_Buttons_Download--Text">Download</span>
+                </div>
+              </div>
+              <div className="ImagePage_Images--Image">
+                <img src={image.url} loading="lazy"></img>
+              </div>
             </div>
           );
         })}

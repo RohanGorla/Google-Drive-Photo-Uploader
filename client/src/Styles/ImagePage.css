@@ -1,33 +1,63 @@
 .ImagePage {
+    /* background-color: rgb(36, 36, 36); */
     position: relative;
     height: calc(100dvh - 80px);
     width: 100dvw;
-    /* padding: .7em; */
     margin-top: 80px;
+    padding-bottom: .7em;
 }
 
 .ImagePage_Images {
     display: flex;
+    /* align-items: center; */
     height: 100%;
     width: 100dvw;
     padding: 0em .5em;
     overflow-x: scroll;
     scroll-snap-type: x mandatory;
-    /* outline: 2px solid white; */
 }
 
 .ImagePage_Images--Image_Container {
     height: 100%;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
     scroll-snap-align: start;
     scroll-snap-stop: always;
-    /* outline: 2px solid white; */
 }
 
-.ImagePage_Images--Image_Container img {
+.ImagePage_Images--Image {
+    height: 93%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ImagePage_Images--Image img {
     width: 95dvw;
+    max-height: 100%;
     margin: 0em 2.5dvw;
-    /* outline: 2px solid white; */
+}
+
+.ImagePage_Images--Buttons {
+    /* background-color: silver; */
+    height: 7%;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0em 1em;
+}
+
+.Image_Buttons_Download {
+    background-color: black;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: .7em;
+    padding: .3em 1.4em;
+    border-style: none;
+    border: 2px solid white;
+    border-radius: 6px;
+    box-shadow: 2px 2px gray;
 }

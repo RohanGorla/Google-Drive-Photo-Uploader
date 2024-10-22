@@ -137,7 +137,7 @@ app.post("/getfolderfiles", async (req, res) => {
       const response = await drive.files.list({
         q: query,
         pageToken: nextPageToken,
-        fields: "nextPageToken, files(id, mimeType)",
+        fields: "nextPageToken, files(*)",
       });
       nextPageToken = response.data.nextPageToken;
       filesArray = filesArray.concat(response.data.files);

@@ -12,8 +12,6 @@ function Gallery() {
     context.setAllFoldersData,
   ];
   const [currentFolder, setCurrentFolder] = useState("");
-  
-  const [tracking, setTracking] = useState(5);
   const location = useLocation();
   const navigate = useNavigate();
   const folderRef = useRef();
@@ -31,21 +29,11 @@ function Gallery() {
             src={`data:image/jpeg;base64,${data.bgImage}`}
           ></img>
         </div>
-        <section
-          className="Gallery_Folders"
-          onScroll={() => {
-            const { offsetTop } = folderRef.current;
-            const elementRect = folderRef.current.getBoundingClientRect();
-            console.log(elementRect);
-            if (elementRect.y < 100) {
-              setTracking(6);
-            }
-          }}
-        >
+        <section className="Gallery_Folders">
           {allFoldersData?.map((folder, index) => {
             return (
               <div
-                ref={index == tracking ? folderRef : null}
+                ref={index == currentFolder ? folderRef : null}
                 key={index}
                 className="Folder_Container"
                 onClick={() => {
@@ -69,21 +57,6 @@ function Gallery() {
           })}
         </section>
       </div>
-      {/* <section className="Folder_Images">
-        {proxyUrl.map((image, index) => {
-          return (
-            <div key={index} className="Folder_Images--Image">
-              <img
-                src={image}
-                loading="lazy"
-                onClick={() => {
-                  setCurrentImage(index);
-                }}
-              ></img>
-            </div>
-          );
-        })}
-      </section> */}
     </>
   );
 }
