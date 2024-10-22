@@ -11,14 +11,23 @@ import "../Styles/Homepage.css";
 
 function Homepage() {
   const context = useOutletContext();
-  const [files, setFiles] = useState([]);
-  const [userName, setUserName] = useState("");
+  const [files, setFiles] = [context.files, context.setFiles];
+  const [userName, setUserName] = [context.userName, context.setUserName];
   const [showLoadingPage, setShowLoadingPage] = useState(true);
   const [greetingNote, setGreetingNote] = useState("");
   const [scrollToUploadForm, setScrollToUploadForm] = useState(false);
-  const [userNameError, setUserNameError] = useState(false);
-  const [filesQuantityError, setFilesQuantityError] = useState(false);
-  const [startUpload, setStartUpload] = useState(false);
+  const [userNameError, setUserNameError] = [
+    context.userNameError,
+    context.setUserNameError,
+  ];
+  const [filesQuantityError, setFilesQuantityError] = [
+    context.filesQuantityError,
+    context.setFilesQuantityError,
+  ];
+  const [startUpload, setStartUpload] = [
+    context.startUpload,
+    context.setStartUpload,
+  ];
   const uploadRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -237,12 +246,13 @@ function Homepage() {
               <div
                 className="HomePage_Upload_Submit_Button"
                 onClick={() => {
-                  if (startUpload) {
+                  const upload = sessionStorage.getItem("upload");
+                  if (upload || startUpload) {
                     console.log("already started");
                   } else {
                     console.log("Start upload");
+                    sessionStorage.setItem("upload", true);
                     setStartUpload(true);
-                    handleSubmit();
                   }
                 }}
               >

@@ -12,7 +12,6 @@ function ImagePage() {
   const folderId = useParams().id;
   const maxLoad = 10;
   const imageRef = useRef(null);
-  const scrollRef = useRef(null);
 
   async function getInitialImages(id) {
     const response = await axios.post(
@@ -151,16 +150,11 @@ function ImagePage() {
   }
 
   useEffect(() => {
-    // getInitialImages(folderId);
+    getInitialImages(folderId);
   }, []);
 
   return (
-    <div
-      className="ImagePage"
-      onClick={() => {
-        getInitialImages(folderId);
-      }}
-    >
+    <div className="ImagePage">
       <div
         className="ImagePage_Images"
         onScroll={() => {
