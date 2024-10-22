@@ -1,15 +1,16 @@
 import { useEffect, useState, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import { FaImages } from "react-icons/fa";
 import { MdUpload } from "react-icons/md";
 import { MdPhoto } from "react-icons/md";
 import imageCompression from "browser-image-compression";
 import axios from "axios";
-import data from "./Base64images";
+import data from "../assets/Base64images";
 import "../Styles/Homepage.css";
 
 function Homepage() {
+  const context = useOutletContext();
   const [files, setFiles] = useState([]);
   const [userName, setUserName] = useState("");
   const [showLoadingPage, setShowLoadingPage] = useState(true);
@@ -92,7 +93,6 @@ function Homepage() {
 
   /* Greeting Note Typing Effect */
   useEffect(() => {
-    console.log("In animation, length ->", greetingNote.length);
     if (greetingNote.length) {
       setTimeout(() => {
         if (greetingNote.length !== message.length) {
@@ -104,11 +104,8 @@ function Homepage() {
   }, [greetingNote]);
 
   useEffect(() => {
-    console.log("Inside main");
     const previousPath = sessionStorage.getItem("prevLoc");
-    // const alreadyVisited = sessionStorage.getItem("visited");
     if (previousPath && previousPath !== location.key) {
-      console.log("Inside");
       setShowLoadingPage(false);
       setGreetingNote(message[0]);
       setTimeout(() => {
@@ -122,7 +119,6 @@ function Homepage() {
         setScrollToUploadForm(true);
       }, scrollDelay - 50);
     } else {
-      console.log("inside else");
       setTimeout(() => {
         sessionStorage.setItem("prevLoc", location.key);
         setShowLoadingPage(false);
@@ -157,20 +153,8 @@ function Homepage() {
       {/* Home Page Background Image */}
       <div className="HomePage_Background">
         <div className="HomePage_Background--Tint"></div>
-        <img src={`data:image/jpeg;base64,${data.brideImage}`}></img>
+        <img src={`data:image/jpeg;base64,${data.bgImage}`}></img>
       </div>
-      {/* Home Page Navbar */}
-      <nav className="HomePage_Navbar">
-        {/* <div className="HomePage_Navbar--Tint"></div>
-        <div className="HomePage_Navbar_ViewGallery_Button">
-          <div className="HomePage_Navbar_ViewGallery_Button--Background"></div>
-          <FaImages
-            className="HomePage_Navbar_ViewGallery_Button--Icon"
-            size={20}
-          />
-          <p className="HomePage_Navbar_ViewGallery_Button--Text">Gallery</p>
-        </div> */}
-      </nav>
       {/* Home Page Main Container */}
       <div className="HomePage_MainContainer">
         {/* Home Page Greeting Card */}
@@ -209,15 +193,18 @@ function Homepage() {
             ></input>
           </div>
           {/* Folder Name Empty Error Message */}
-          <p
+          <div
             className={
               userNameError
                 ? "HomePage_Upload_Folder_Name_Empty"
                 : "HomePage_Upload_Folder_Name_Empty--Inactive"
             }
           >
-            * Your name is required for folder creation!
-          </p>
+            <div className="HomePage_Upload_Folder_Name_Empty--Tint"></div>
+            <p className="HomePage_Upload_Folder_Name_Empty--Note">
+              * Your name is required for folder creation!
+            </p>
+          </div>
           {/* Select And Upload Images Container */}
           <div className="HomePage_Upload_Select_And_Upload_Container">
             <p className="HomePage_Upload_Select_And_Upload--Label">
@@ -226,11 +213,13 @@ function Homepage() {
             <div className="HomePage_Upload_Select_And_Upload">
               {/* Select Images Button */}
               <div className="HomePage_Upload_Image_Selector">
+                <div className="Upload_Button--Tint"></div>
                 <label
                   className="HomePage_Upload_Image_Selector--Label"
                   htmlFor="imagesUpload"
                 >
-                  <MdPhoto size={22} /> <span>Select</span>
+                  <MdPhoto size={22} className="Upload_Button--Icons" />{" "}
+                  <span>Select</span>
                 </label>
                 <input
                   type="file"
@@ -257,20 +246,25 @@ function Homepage() {
                   }
                 }}
               >
-                <MdUpload size={22} /> <span>Upload</span>
+                <div className="Upload_Button--Tint"></div>
+                <MdUpload size={22} className="Upload_Button--Icons" />{" "}
+                <span>Upload</span>
               </div>
             </div>
           </div>
           {/* No Images Selected Error */}
-          <p
+          <div
             className={
               filesQuantityError
                 ? "HomePage_Upload_Image_Select_Empty"
                 : "HomePage_Upload_Image_Select_Empty--Inactive"
             }
           >
-            * Please select atleast 1 image!
-          </p>
+            <div className="HomePage_Upload_Image_Select_Empty--Tint"></div>
+            <p className="HomePage_Upload_Image_Select_Empty--Note">
+              * Please select atleast 1 image!
+            </p>
+          </div>
         </section>
         {/* Home Page Gallery */}
         <section
@@ -293,6 +287,7 @@ function Homepage() {
                 navigate("/gallery");
               }}
             >
+              <div className="HomePage_Gallery_Button--Tint"></div>
               <FaImages className="HomePage_Gallery_Button--Icon" size={22} />
               <p className="HomePage_Gallery_Button--Text">Gallery</p>
             </div>

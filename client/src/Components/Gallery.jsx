@@ -155,8 +155,11 @@ function Gallery() {
                 <p className="Folder_Name">{folder.name}</p>
                 <div className="Folder_View_Button_Container">
                   <div className="Folder_View_Button">
-                  <div className="Folder_View_Button--Tint"></div>
-                    <FaRegFolderOpen className="Folder_View_Button--Icon" size={22} />
+                    <div className="Folder_View_Button--Tint"></div>
+                    <FaRegFolderOpen
+                      className="Folder_View_Button--Icon"
+                      size={22}
+                    />
                     <p className="Folder_View_Button--Text">View</p>
                   </div>
                 </div>

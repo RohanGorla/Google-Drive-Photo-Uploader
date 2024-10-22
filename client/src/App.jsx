@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
+import data from "./assets/Rings.js";
 import axios from "axios";
 import "./App.css";
 
@@ -20,7 +21,21 @@ function App() {
 
   return (
     <>
-      <Outlet context={{ allFoldersData, setAllFoldersData }} />
+      {/* Home Page Navbar */}
+      <nav className="Navbar">
+        <span className="Navbar_Names">Alekhya</span>
+        <img
+          src={`data:image/jpeg;base64,${data.rings}`}
+          className="Navbar_Rings_Image"
+        ></img>
+        <span className="Navbar_Names">Dinesh</span>
+      </nav>
+      <Outlet
+        context={{
+          allFoldersData,
+          setAllFoldersData,
+        }}
+      />
     </>
   );
 }
