@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
-import { useOutletContext, useLocation } from "react-router-dom";
+import { useOutletContext, useLocation, useNavigate } from "react-router-dom";
+import { FaRegFolderOpen } from "react-icons/fa";
+import data from "../assets/Gallery";
 import axios from "axios";
+import "../Styles/Gallery.css";
 
 function Gallery() {
   const context = useOutletContext();
@@ -13,6 +16,7 @@ function Gallery() {
   const [proxyUrl, setProxyUrl] = useState([]);
   const [currentImage, setCurrentImage] = useState(0);
   const location = useLocation();
+  const navigate = useNavigate();
 
   async function getFolderFiles(id) {
     const response = await axios.post(
@@ -130,26 +134,38 @@ function Gallery() {
 
   return (
     <>
-      <section className="Folders">
-        <p>Pick a folde from below</p>
-        {allFoldersData?.map((folder, index) => {
-          return (
-            <div key={index}>
+      <div className="Gallery_Main">
+        <div className="Gallery_Background">
+          <img
+            className="Gallery_Background--Image"
+            src={`data:image/jpeg;base64,${data.bgImage}`}
+          ></img>
+        </div>
+        <section className="Gallery_Folders">
+          {allFoldersData?.map((folder, index) => {
+            return (
               <div
-                className="Folders--Folder"
+                key={index}
+                className="Folder_Container"
                 onClick={() => {
-                  getFolderFiles(folder.id);
-                  setCurrentFolder(folder.id);
-                  setProxyUrl([]);
+                  navigate(`folder/${folder.id}`);
                 }}
               >
+                <div className="Folder--Tint"></div>
                 <p className="Folder_Name">{folder.name}</p>
+                <div className="Folder_View_Button_Container">
+                  <div className="Folder_View_Button">
+                  <div className="Folder_View_Button--Tint"></div>
+                    <FaRegFolderOpen className="Folder_View_Button--Icon" size={22} />
+                    <p className="Folder_View_Button--Text">View</p>
+                  </div>
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </section>
-      <section className="Folder_Images">
+            );
+          })}
+        </section>
+      </div>
+      {/* <section className="Folder_Images">
         {proxyUrl.map((image, index) => {
           return (
             <div key={index} className="Folder_Images--Image">
@@ -163,7 +179,7 @@ function Gallery() {
             </div>
           );
         })}
-      </section>
+      </section> */}
     </>
   );
 }

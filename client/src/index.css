@@ -7,5 +7,5 @@
 body {
   font-family: var(--Primary-Font);
   background-color: black;
-  color: white;
+  /* color: white; */
 }
