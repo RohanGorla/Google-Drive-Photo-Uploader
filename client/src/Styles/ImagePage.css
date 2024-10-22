@@ -1,0 +1,33 @@
+.ImagePage {
+    position: relative;
+    height: calc(100dvh - 80px);
+    width: 100dvw;
+    /* padding: .7em; */
+    margin-top: 80px;
+}
+
+.ImagePage_Images {
+    display: flex;
+    height: 100%;
+    width: 100dvw;
+    padding: 0em .5em;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+    /* outline: 2px solid white; */
+}
+
+.ImagePage_Images--Image_Container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    /* outline: 2px solid white; */
+}
+
+.ImagePage_Images--Image_Container img {
+    width: 95dvw;
+    margin: 0em 2.5dvw;
+    /* outline: 2px solid white; */
+}

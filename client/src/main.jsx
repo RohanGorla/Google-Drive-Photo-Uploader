@@ -11,7 +11,7 @@ import "./index.css";
 import App from "./App.jsx";
 import Homepage from "./Components/Homepage.jsx";
 import Gallery from "./Components/Gallery.jsx";
-import Folder from "./Components/Folder.jsx";
+import ImagePage from "./Components/ImagePage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,7 +20,7 @@ const router = createBrowserRouter(
         <Route path="" element={<Homepage />} />
         <Route path="gallery">
           <Route path="" element={<Gallery />} />
-          <Route path="folder/:id" element={<Folder />} />
+          <Route path="folder/:id" element={<ImagePage />} />
         </Route>
       </Route>
     </>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useOutletContext, useLocation, useNavigate } from "react-router-dom";
 import { FaRegFolderOpen } from "react-icons/fa";
 import data from "../assets/Gallery";
@@ -12,121 +12,11 @@ function Gallery() {
     context.setAllFoldersData,
   ];
   const [currentFolder, setCurrentFolder] = useState("");
-  const [folderFiles, setFolderFiles] = useState([]);
-  const [proxyUrl, setProxyUrl] = useState([]);
-  const [currentImage, setCurrentImage] = useState(0);
+  
+  const [tracking, setTracking] = useState(5);
   const location = useLocation();
   const navigate = useNavigate();
-
-  async function getFolderFiles(id) {
-    const response = await axios.post(
-      `${import.meta.env.VITE_BASE_URL}/getfolderfiles`,
-      {
-        folderId: id,
-      }
-    );
-    if (response.data.access) {
-      const imagesData = response.data.data;
-      setFolderFiles(imagesData);
-      if (imagesData.length <= 5) {
-        for (let i = 0; i < imagesData.length; i++) {
-          getProxyUrl(
-            `https://drive.google.com/uc?export=view&id=${imagesData[i].id}`
-          );
-        }
-      } else {
-        for (let i = 0; i < 5; i++) {
-          getProxyUrl(
-            `https://drive.google.com/uc?export=view&id=${imagesData[i].id}`
-          );
-        }
-      }
-    } else {
-      console.log(response.data.error);
-    }
-  }
-
-  async function getProxyUrl(url) {
-    try {
-      const response = await axios.get(
-        `${
-          import.meta.env.VITE_BASE_URL
-        }/proxy-image?imageUrl=${encodeURIComponent(url)}`,
-        {
-          responseType: "blob",
-        }
-      );
-
-      if (
-        response.data.size > 0 &&
-        response.data.type.split("/")[0] == "image"
-      ) {
-        const imageUrl = URL.createObjectURL(response.data);
-        setProxyUrl((prev) => {
-          return [...prev, imageUrl];
-        });
-      } else {
-        getNewProxyUrl(url);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async function getNewProxyUrl(url) {
-    try {
-      const response = await axios.get(
-        `${
-          import.meta.env.VITE_BASE_URL
-        }/proxy-image?imageUrl=${encodeURIComponent(
-          url
-        )}&timestamp=${Date.now()}`,
-        {
-          responseType: "blob",
-        }
-      );
-
-      if (
-        response.data.size > 0 &&
-        response.data.type.split("/")[0] == "image"
-      ) {
-        const imageUrl = URL.createObjectURL(response.data);
-        setProxyUrl((prev) => {
-          return [...prev, imageUrl];
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async function getNextImages(currentImageIndex) {
-    const totalImagesCount = folderFiles.length;
-    const maxLoad = 5;
-    if (currentImageIndex + maxLoad < totalImagesCount - 1) {
-      for (
-        let i = currentImageIndex + 1;
-        i < currentImageIndex + maxLoad + 1;
-        i++
-      ) {
-        getProxyUrl(
-          `https://drive.google.com/uc?export=view&id=${folderFiles[i].id}`
-        );
-      }
-    } else if (currentImageIndex + maxLoad >= totalImagesCount - 1) {
-      for (let i = currentImageIndex + 1; i < totalImagesCount; i++) {
-        getProxyUrl(
-          `https://drive.google.com/uc?export=view&id=${folderFiles[i].id}`
-        );
-      }
-    }
-  }
-
-  useEffect(() => {
-    if (currentImage == proxyUrl.length - 1) {
-      getNextImages(currentImage);
-    }
-  }, [currentImage]);
+  const folderRef = useRef();
 
   useEffect(() => {
     sessionStorage.setItem("prevLoc", location.key);
@@ -141,10 +31,21 @@ function Gallery() {
             src={`data:image/jpeg;base64,${data.bgImage}`}
           ></img>
         </div>
-        <section className="Gallery_Folders">
+        <section
+          className="Gallery_Folders"
+          onScroll={() => {
+            const { offsetTop } = folderRef.current;
+            const elementRect = folderRef.current.getBoundingClientRect();
+            console.log(elementRect);
+            if (elementRect.y < 100) {
+              setTracking(6);
+            }
+          }}
+        >
           {allFoldersData?.map((folder, index) => {
             return (
               <div
+                ref={index == tracking ? folderRef : null}
                 key={index}
                 className="Folder_Container"
                 onClick={() => {

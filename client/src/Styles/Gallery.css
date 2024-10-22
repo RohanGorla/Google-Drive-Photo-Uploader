@@ -34,6 +34,7 @@
   height: 100%;
   width: 100%;
   overflow-y: scroll;
+  scroll-snap-type: y mandatory;
 }
 
 .Folder_Container {
@@ -47,6 +48,7 @@
   border-radius: 10px;
   border: 2px black solid;
   box-shadow: 3px 3px black;
+  scroll-snap-align: start;
 }
 
 .Folder--Tint {
