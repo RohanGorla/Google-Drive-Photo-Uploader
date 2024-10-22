@@ -5,7 +5,6 @@
 }
 
 body {
-  font-family: var(--Primary-Font);
+  font-family: "Roboto Condensed", sans-serif;
   background-color: black;
-  /* color: white; */
 }

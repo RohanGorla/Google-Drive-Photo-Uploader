@@ -7,7 +7,7 @@
     position: relative;
     height: calc(100dvh - 80px);
     width: 100dvw;
-    padding: 1em;
+    padding: .7em;
     margin-top: 80px;
 }
 
@@ -31,16 +31,9 @@
 }
 
 .Gallery_Folders {
-  position: absolute;
-  top: 0px;
-  left: 0px;
   height: 100%;
   width: 100%;
   overflow-y: scroll;
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  column-gap: .5em;
-  padding: .7em;
 }
 
 .Folder_Container {

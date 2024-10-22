@@ -4,7 +4,7 @@
 
 :root {
   --Header: 22px;
-  --Primary-Font: "Roboto Condensed", sans-serif;
+  --Navbar_Names: 40px;
 }
 
 .Header h1 {

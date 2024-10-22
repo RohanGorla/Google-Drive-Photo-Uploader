@@ -2,7 +2,6 @@
     --LoadingPage_GroomName: 40px;
     --LoadingPage_BrideName: 40px;
     --LoadingPage_WelcomeMessage: 25px;
-    --Navbar_Names: 40px;
     --Greeting_Message: 19px;
     --HomePage_Upload_Container--Note: 19px;
     --File_Upload_Label: 17px;
@@ -261,7 +260,6 @@
     z-index: 3;
     padding: 1em;
     margin-top: 3em;
-    
 }
 
 .HomePage_Upload_Container--Tint {
