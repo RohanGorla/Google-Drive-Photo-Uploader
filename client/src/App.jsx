@@ -128,6 +128,7 @@ function App() {
         setFiles([]);
         setUserName("");
         setTimeout(() => {
+          setPercent(0);
           setUploadComplete(true);
           setShowUploadMessage(false);
           setHasFolder(true);
@@ -144,101 +145,6 @@ function App() {
         }, 2500);
       }, 800);
     }
-    // if (userName.length && files.length) {
-    //   const folderCreationResponse = await axios.post(
-    //     `${import.meta.env.VITE_BASE_URL}/createfolder`,
-    //     {
-    //       folderName: userName,
-    //     }
-    //   );
-    //   console.log(folderCreationResponse);
-    //   if (folderCreationResponse.data.access) {
-    //     setStartTransition(true);
-    //     setTimeout(async () => {
-    //       setTimeout(() => {
-    //         setShowUploadMessage(true);
-    //       }, 1000);
-    //       setStartUpload(true);
-    //       setShowUploadAnimation(true);
-    //       let count = 0;
-    //       const folderId = folderCreationResponse.data.data.id;
-    //       localStorage.setItem("myFolderName", userName);
-    //       localStorage.setItem("myFolderId", folderId);
-    //       console.log(folderId);
-    //       for (const file of files) {
-    //         let compressedFile;
-    //         if (file.size / (1024 * 1024) > 4) {
-    //           const options = {
-    //             maxSizeMB: 4,
-    //             useWebWorker: true,
-    //           };
-    //           compressedFile = await imageCompression(file, options);
-    //         } else {
-    //           compressedFile = file;
-    //         }
-    //         console.log(
-    //           `Folder ${count} out of ${files.length} -> `,
-    //           compressedFile.size / (1024 * 1024),
-    //           "MB"
-    //         );
-    //         let formData = new FormData();
-    //         formData.append("files", compressedFile);
-    //         formData.append("userName", userName);
-    //         formData.append("folderId", folderId);
-    //         const fileUploadResponse = await axios.post(
-    //           `${import.meta.env.VITE_BASE_URL}/upload`,
-    //           formData,
-    //           {
-    //             headers: {
-    //               "Content-Type": "multipart/form-data",
-    //             },
-    //           }
-    //         );
-    //         console.log(fileUploadResponse);
-    //         count += 1;
-    //         const percentage = Math.round((count / files.length) * 100);
-    //         setPercent(percentage);
-    //       }
-    //       console.log("all images uploaded");
-    //       setShowUploadAnimation(false);
-    //       setFiles([]);
-    //       setUserName("");
-    //       setTimeout(() => {
-    //         setUploadComplete(true);
-    //         setShowUploadMessage(false);
-    //       }, 300);
-    //       setTimeout(() => {
-    //         sessionStorage.removeItem("upload");
-    //         setStartUpload(false);
-    //         setRequestUpload(false);
-    //       }, 2000);
-    //       setTimeout(() => {
-    //         setStartTransition(false);
-    //       }, 2500);
-    //     }, 800);
-    //   } else {
-    //     console.log(`${folderCreationResponse.data.error}`);
-    //     sessionStorage.removeItem("upload");
-    //     setRequestUpload(false);
-    //     setFiles([]);
-    //     setUserName("");
-    //   }
-    //   setUserNameError(false);
-    //   setFilesQuantityError(false);
-    // } else {
-    //   if (userName.length == 0) {
-    //     setUserNameError(true);
-    //   } else {
-    //     setUserNameError(false);
-    //   }
-    //   if (files.length == 0) {
-    //     setFilesQuantityError(true);
-    //   } else {
-    //     setFilesQuantityError(false);
-    //   }
-    //   sessionStorage.removeItem("upload");
-    //   setRequestUpload(false);
-    // }
   }
 
   useEffect(() => {
