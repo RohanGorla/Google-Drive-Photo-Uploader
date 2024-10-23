@@ -116,11 +116,11 @@ function Homepage() {
     const previousPath = sessionStorage.getItem("prevLoc");
     if (previousPath && previousPath !== location.key) {
       setShowLoadingPage(false);
-      setGreetingNote(message[0]);
+      setGreetingNote(message);
       setTimeout(() => {
         sessionStorage.setItem("prevLoc", location.key);
       }, 1000);
-      const scrollDelay = message.length * 20 + 2000 + 1000;
+      const scrollDelay = 500;
       setTimeout(() => {
         uploadRef.current?.scrollIntoView({ behavior: "smooth" });
       }, scrollDelay);

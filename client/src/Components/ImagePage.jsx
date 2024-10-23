@@ -151,6 +151,7 @@ function ImagePage() {
 
   useEffect(() => {
     getInitialImages(folderId);
+    sessionStorage.setItem("currentFolder", folderId);
   }, []);
 
   return (

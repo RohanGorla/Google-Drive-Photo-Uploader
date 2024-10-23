@@ -17,7 +17,17 @@ function Gallery() {
   const folderRef = useRef();
 
   useEffect(() => {
+    if (folderRef.current) {
+      folderRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [currentFolder]);
+
+  useEffect(() => {
     sessionStorage.setItem("prevLoc", location.key);
+    const currentFolderId = sessionStorage.getItem("currentFolder");
+    if (currentFolderId) {
+      setCurrentFolder(currentFolderId);
+    }
   }, []);
 
   return (
@@ -33,7 +43,7 @@ function Gallery() {
           {allFoldersData?.map((folder, index) => {
             return (
               <div
-                ref={index == currentFolder ? folderRef : null}
+                ref={folder.id == currentFolder ? folderRef : null}
                 key={index}
                 className="Folder_Container"
                 onClick={() => {
