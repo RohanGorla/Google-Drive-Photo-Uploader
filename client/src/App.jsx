@@ -19,6 +19,7 @@ function App() {
   const [startTransition, setStartTransition] = useState(false);
   const [showUploadAnimation, setShowUploadAnimation] = useState(false);
   const [uploadComplete, setUploadComplete] = useState(false);
+  const [uploadStatusMessage, setUploadStatusMessage] = useState("");
   const [percent, setPercent] = useState(0);
   const [hasFolder, setHasFolder] = useState(false);
   const [myFolder, setMyFolder] = useState({});
@@ -54,6 +55,7 @@ function App() {
           setRequestUpload(false);
           setFiles([]);
           setUserName("");
+          setUploadStatusMessage("");
           return;
         }
       } else {
@@ -69,16 +71,19 @@ function App() {
         }
         sessionStorage.removeItem("upload");
         setRequestUpload(false);
+        setUploadStatusMessage("");
         return;
       }
     }
     if (folderId.length && folderName.length) {
       setStartTransition(true);
+      setUploadStatusMessage("Your files are being uploaded!");
       setTimeout(async () => {
         localStorage.setItem("myFolderName", folderName);
         localStorage.setItem("myFolderId", folderId);
         setTimeout(() => {
           setShowUploadMessage(true);
+          setUploadStatusMessage("");
         }, 1000);
         setStartUpload(true);
         setShowUploadAnimation(true);
@@ -354,6 +359,8 @@ function App() {
           setMyFolder,
           hasFolder,
           setHasFolder,
+          uploadStatusMessage,
+          setUploadStatusMessage,
         }}
       />
     </>

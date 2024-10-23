@@ -14,6 +14,10 @@ function Homepage() {
   const [showLoadingPage, setShowLoadingPage] = useState(true);
   const [greetingNote, setGreetingNote] = useState("");
   const [scrollToUploadForm, setScrollToUploadForm] = useState(false);
+  const [uploadStatusMessage, setUploadStatusMessage] = [
+    context.uploadStatusMessage,
+    context.setUploadStatusMessage,
+  ];
   const [hasFolder, setHasFolder] = [context.hasFolder, context.setHasFolder];
   const [myFolder, setMyFolder] = [context.myFolder, context.setMyFolder];
   const [showUploadMessage, setShowUploadMessage] = [
@@ -309,6 +313,7 @@ function Homepage() {
                   multiple
                   onChange={(e) => {
                     setFiles(e.target.files);
+                    setUploadStatusMessage(`${e.target.files.length} files selected!`);
                   }}
                   style={{ display: "none" }}
                 ></input>
@@ -320,10 +325,12 @@ function Homepage() {
                   const upload = sessionStorage.getItem("upload");
                   if (upload || requestUpload) {
                     console.log("already started");
+                    setUploadStatusMessage("Images are already being uploaded...");
                   } else {
                     console.log("Start upload");
                     sessionStorage.setItem("upload", true);
                     setRequestUpload(true);
+                    setUploadStatusMessage("Starting upload process...");
                   }
                 }}
               >
@@ -344,6 +351,18 @@ function Homepage() {
             <div className="HomePage_Upload_Image_Select_Empty--Tint"></div>
             <p className="HomePage_Upload_Image_Select_Empty--Note">
               * Please select atleast 1 image!
+            </p>
+          </div>
+          <div
+            className={
+              uploadStatusMessage.length
+                ? "HomePage_Upload_Status_Message_Container"
+                : "HomePage_Upload_Status_Message_Container--Inactive"
+            }
+          >
+            <div className="HomePage_Upload_Status_Message_Container--Tint"></div>
+            <p className="HomePage_Upload_Status_Message_Container--Message">
+              {uploadStatusMessage}
             </p>
           </div>
         </section>
