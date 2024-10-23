@@ -36,7 +36,7 @@ async function deleteFolder(fileId) {
   }
 }
 
-// deleteFolder("1rWB8pOGB53bHDQDRPrMDqcbV7fFEKdnd");
+// deleteFolder("1MPLHpjl21qdsOq-sWCEQUyHz7t-YwlJi");
 
 /* Basic Get API */
 
@@ -55,7 +55,7 @@ app.get("/getallfolders", async (req, res) => {
       const response = await drive.files.list({
         q: query,
         pageToken: nextPageToken,
-        fields: "nextPageToken, files(*)",
+        fields: "nextPageToken, files(id, name)",
       });
       nextPageToken = response.data.nextPageToken;
       filesArray = filesArray.concat(response.data.files);

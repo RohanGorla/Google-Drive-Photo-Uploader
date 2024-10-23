@@ -1,9 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
-import { FaHeart } from "react-icons/fa";
-import { FaImages } from "react-icons/fa";
-import { MdUpload } from "react-icons/md";
-import { MdPhoto } from "react-icons/md";
+import { FaHeart, FaImages } from "react-icons/fa";
+import { MdUpload, MdPhoto, MdCreateNewFolder } from "react-icons/md";
 import imageCompression from "browser-image-compression";
 import axios from "axios";
 import data from "../assets/Base64images";
@@ -16,6 +14,8 @@ function Homepage() {
   const [showLoadingPage, setShowLoadingPage] = useState(true);
   const [greetingNote, setGreetingNote] = useState("");
   const [scrollToUploadForm, setScrollToUploadForm] = useState(false);
+  const [hasFolder, setHasFolder] = [context.hasFolder, context.setHasFolder];
+  const [myFolder, setMyFolder] = [context.myFolder, context.setMyFolder];
   const [showUploadMessage, setShowUploadMessage] = [
     context.showUploadMessage,
     context.setShowUploadMessage,
@@ -117,6 +117,12 @@ function Homepage() {
   }, [greetingNote]);
 
   useEffect(() => {
+    const myFolderName = localStorage.getItem("myFolderName");
+    const myFolderId = localStorage.getItem("myFolderId");
+    if (myFolderName && myFolderId) {
+      setMyFolder({ name: myFolderName, id: myFolderId });
+      setHasFolder(true);
+    }
     const previousPath = sessionStorage.getItem("prevLoc");
     if (previousPath && previousPath !== location.key) {
       setShowLoadingPage(false);
@@ -182,13 +188,13 @@ function Homepage() {
             Keep this tab open while we upload your photos. Explore the gallery
             and enjoy moments shared by others in the meantime!
           </p>
-          <div className="HomePage_Upload_Message_Card--Button">
-            <div
-              className="HomePage_Upload_Message_Card--Button--Tint"
-              onClick={() => {
-                setShowUploadMessage(false);
-              }}
-            ></div>
+          <div
+            className="HomePage_Upload_Message_Card--Button"
+            onClick={() => {
+              setShowUploadMessage(false);
+            }}
+          >
+            <div className="HomePage_Upload_Message_Card--Button--Tint"></div>
             <span>OK</span>
           </div>
         </div>
@@ -217,7 +223,13 @@ function Homepage() {
             for years to come!
           </p>
           {/* Folder Name Input */}
-          <div className="HomePage_Upload_Folder_Name">
+          <div
+            className={
+              hasFolder
+                ? "HomePage_Upload_Folder_Name--Inactive"
+                : "HomePage_Upload_Folder_Name"
+            }
+          >
             <label className="HomePage_Upload_Folder_Name--Label">
               Your Name:
             </label>
@@ -225,6 +237,7 @@ function Homepage() {
               className="HomePage_Upload_Folder_Name--Input"
               type="text"
               placeholder="Enter your name..."
+              value={userName}
               onChange={(e) => {
                 setUserName(e.target.value);
               }}
@@ -242,6 +255,35 @@ function Homepage() {
             <p className="HomePage_Upload_Folder_Name_Empty--Note">
               * Your name is required for folder creation!
             </p>
+          </div>
+          {/* Add New Folder Option */}
+          <div
+            className={
+              hasFolder
+                ? "HomePage_Add_New_Folder_Container"
+                : "HomePage_Add_New_Folder_Container--Inactive"
+            }
+          >
+            <p className="HomePage_Add_New_Folder--Note">
+              Your images will be uploaded to {myFolder.name}
+            </p>
+            <div
+              className="HomePage_Add_New_Folder--Button"
+              onClick={() => {
+                setHasFolder(false);
+                localStorage.removeItem("myFolderName");
+                localStorage.removeItem("myFolderId");
+              }}
+            >
+              <div className="HomePage_Add_New_Folder--Button--Tint"></div>
+              <MdCreateNewFolder
+                className="HomePage_Add_New_Folder--Button--Icon"
+                size={22}
+              />{" "}
+              <span className="HomePage_Add_New_Folder--Button--Text">
+                New Folder
+              </span>
+            </div>
           </div>
           {/* Select And Upload Images Container */}
           <div className="HomePage_Upload_Select_And_Upload_Container">
