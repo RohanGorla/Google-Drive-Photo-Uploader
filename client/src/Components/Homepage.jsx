@@ -24,9 +24,9 @@ function Homepage() {
     context.filesQuantityError,
     context.setFilesQuantityError,
   ];
-  const [startUpload, setStartUpload] = [
-    context.startUpload,
-    context.setStartUpload,
+  const [requestUpload, setRequestUpload] = [
+    context.requestUpload,
+    context.setRequestUpload,
   ];
   const uploadRef = useRef(null);
   const navigate = useNavigate();
@@ -247,12 +247,12 @@ function Homepage() {
                 className="HomePage_Upload_Submit_Button"
                 onClick={() => {
                   const upload = sessionStorage.getItem("upload");
-                  if (upload || startUpload) {
+                  if (upload || requestUpload) {
                     console.log("already started");
                   } else {
                     console.log("Start upload");
                     sessionStorage.setItem("upload", true);
-                    setStartUpload(true);
+                    setRequestUpload(true);
                   }
                 }}
               >
