@@ -16,6 +16,10 @@ function Homepage() {
   const [showLoadingPage, setShowLoadingPage] = useState(true);
   const [greetingNote, setGreetingNote] = useState("");
   const [scrollToUploadForm, setScrollToUploadForm] = useState(false);
+  const [showUploadMessage, setShowUploadMessage] = [
+    context.showUploadMessage,
+    context.setShowUploadMessage,
+  ];
   const [userNameError, setUserNameError] = [
     context.userNameError,
     context.setUserNameError,
@@ -163,6 +167,31 @@ function Homepage() {
       <div className="HomePage_Background">
         <div className="HomePage_Background--Tint"></div>
         <img src={`data:image/jpeg;base64,${data.bgImage}`}></img>
+      </div>
+      {/* Home Page Upload Image Message */}
+      <div
+        className={
+          showUploadMessage
+            ? "HomePage_Upload_Message"
+            : "HomePage_Upload_Message HomePage_Upload_Message--Inactive"
+        }
+      >
+        <div className="HomePage_Upload_Message--Tint"></div>
+        <div className="HomePage_Upload_Message--Card">
+          <p className="HomePage_Upload_Message_Card--Message">
+            Keep this tab open while we upload your photos. Explore the gallery
+            and enjoy moments shared by others in the meantime!
+          </p>
+          <div className="HomePage_Upload_Message_Card--Button">
+            <div
+              className="HomePage_Upload_Message_Card--Button--Tint"
+              onClick={() => {
+                setShowUploadMessage(false);
+              }}
+            ></div>
+            <span>OK</span>
+          </div>
+        </div>
       </div>
       {/* Home Page Main Container */}
       <div className="HomePage_MainContainer">

@@ -15,6 +15,7 @@ function App() {
   const [filesQuantityError, setFilesQuantityError] = useState(false);
   const [requestUpload, setRequestUpload] = useState(false);
   const [startUpload, setStartUpload] = useState(false);
+  const [showUploadMessage, setShowUploadMessage] = useState(false);
   const [startTransition, setStartTransition] = useState(false);
   const [showUploadAnimation, setShowUploadAnimation] = useState(false);
   const [uploadComplete, setUploadComplete] = useState(false);
@@ -40,6 +41,9 @@ function App() {
       if (folderCreationResponse.data.access) {
         setStartTransition(true);
         setTimeout(async () => {
+          setTimeout(() => {
+            setShowUploadMessage(true);
+          }, 1000);
           setStartUpload(true);
           setShowUploadAnimation(true);
           let count = 0;
@@ -85,6 +89,7 @@ function App() {
           setUserName("");
           setTimeout(() => {
             setUploadComplete(true);
+            setShowUploadMessage(false);
           }, 300);
           setTimeout(() => {
             sessionStorage.removeItem("upload");
@@ -232,6 +237,8 @@ function App() {
           setFilesQuantityError,
           requestUpload,
           setRequestUpload,
+          showUploadMessage,
+          setShowUploadMessage,
         }}
       />
     </>

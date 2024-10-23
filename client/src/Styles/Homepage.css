@@ -8,6 +8,8 @@
     --Folder_Name--Input: 15px;
     --Upload_Buttons_Text: 16px;
     --Upload_Empty_Message: 17px;
+    --Upload_Card_Message: 19px;
+    --Upload_Card_Button: 16px;
 }
 
 .HomePage {
@@ -200,6 +202,92 @@
     height: 98%;
     border-style: none;
     border-radius: 10px;
+}
+
+.HomePage_Upload_Message {
+    position: absolute;
+    z-index: 5;
+    width: 100%;
+    height: 100%;
+    scale: 1;
+    top: 0px;
+    left: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all .3s ease-in;
+}
+
+.HomePage_Upload_Message--Inactive {
+    scale: 0;
+}
+
+.HomePage_Upload_Message--Tint {
+    background-color: rgb(86, 86, 86);
+    position: absolute;
+    z-index: 4;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    opacity: .6;
+}
+
+.HomePage_Upload_Message--Card {
+    background-color: gray;
+    position: relative;
+    z-index: 5;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2.5em 1em;
+    border-style: none;
+    border-radius: 15px;
+    border: 2px solid black;
+    box-shadow: 3px 3px black;
+
+}
+
+.HomePage_Upload_Message_Card--Message {
+    position: relative;
+    z-index: 5;
+    font-size: var(--Upload_Card_Message);
+    font-weight: 500;
+    line-height: 1.5;
+    text-shadow: .5px .5px black;
+}
+
+.HomePage_Upload_Message_Card--Button {
+    color: white;
+    position: relative;
+    z-index: 5;
+    padding: .6em 1.6em;
+    margin-top: 1.5em;
+    border-style: none;
+    border-radius: 8px;
+    border: 2px solid black;
+    box-shadow: 3px 3px black;
+}
+
+.HomePage_Upload_Message_Card--Button--Tint {
+    background-color: black;
+    position: absolute;
+    z-index: 4;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    border-style: none;
+    border-radius: 6px;
+    opacity: .6;
+}
+
+.HomePage_Upload_Message_Card--Button span {
+    position: relative;
+    z-index: 5;
+    font-size: var(--Upload_Card_Button);
+    font-weight: 600;
 }
 
 .HomePage_MainContainer {
