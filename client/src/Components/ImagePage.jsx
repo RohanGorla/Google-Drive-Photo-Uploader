@@ -1,14 +1,19 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { MdDownload } from "react-icons/md";
+import { MdDownload, MdOutlineSwipe } from "react-icons/md";
 import axios from "axios";
 import "../Styles/ImagePage.css";
 
 function ImagePage() {
+  const [folderName, setFolderName] = useState("");
   const [folderFiles, setFolderFiles] = useState([]);
   const [proxyUrl, setProxyUrl] = useState([]);
+  const [showAllAnimations, setShowAllAnimations] = useState(true);
   const [showNotice, setShowNotice] = useState(false);
   const [showNoticeButton, setShowNoticeButton] = useState(false);
+  const [showNoticeBackground, setShowNoticeBackground] = useState(false);
+  const [showFolderAnimation, setShowFolderAnimation] = useState(false);
+  const [showSwipeAnimation, setShowSwipeAnimation] = useState(false);
   const trackerLimit = 5;
   const [tracker, setTracker] = useState(-1);
   const folderId = useParams().id;
@@ -153,27 +158,44 @@ function ImagePage() {
 
   useEffect(() => {
     getInitialImages(folderId);
-    sessionStorage.setItem("currentFolder", folderId);
+    const currentFolderName = sessionStorage.getItem("currentFolderName");
+    setFolderName(currentFolderName);
     setTimeout(() => {
-      setShowNoticeButton(true);
-    }, 4000);
-    setTimeout(() => {
-      setShowNotice(true);
-    }, 1600);
+      setShowNoticeBackground(true);
+      setTimeout(() => {
+        setShowNotice(true);
+        setTimeout(() => {
+          setShowNoticeButton(true);
+        }, 2500);
+      }, 800);
+    }, 1000);
   }, []);
 
   return (
     <div className="ImagePage">
-      <div className="ImagePage_Loading_Animation_Container">
-        <div className="ImagePage_Loading_Animation">
+      <div
+        className={
+          showAllAnimations
+            ? "ImagePage_Loading_Animations_Container"
+            : "ImagePage_Loading_Animations_Container--Inactive"
+        }
+      >
+        <div className="ImagePage_Loading_Animations">
+          {/* Loading Message Animation */}
           <div
             className={
-              showNotice
+              showNoticeBackground
                 ? "ImagePage_Loading_Animation--Message"
                 : "ImagePage_Loading_Animation--Message ImagePage_Loading_Animation--Message--Inactive"
             }
           >
-            <div className="ImagePage_Loading_Animation--Message--Container">
+            <div
+              className={
+                showNotice
+                  ? "ImagePage_Loading_Animation--Message--Container"
+                  : "ImagePage_Loading_Animation--Message--Container ImagePage_Loading_Animation--Message--Container--Inactive"
+              }
+            >
               <div className="ImagePage_Loading_Animation--Message--Tint"></div>
               <p className="ImagePage_Loading_Animation--Message--Header">
                 Notice
@@ -192,6 +214,16 @@ function ImagePage() {
                 }
                 onClick={() => {
                   setShowNotice(false);
+                  setShowFolderAnimation(true);
+                  setTimeout(() => {
+                    setShowSwipeAnimation(true);
+                    setTimeout(() => {
+                      setShowAllAnimations(false);
+                    }, 4000);
+                  }, 6500);
+                  setTimeout(() => {
+                    setShowNoticeBackground(false);
+                  }, 600);
                 }}
               >
                 <div className="ImagePage_Loading_Animation--Message--Button--Tint"></div>
@@ -201,7 +233,52 @@ function ImagePage() {
               </div>
             </div>
           </div>
-          <div className="ImagePage_Loading_Animation--Folder_Name"></div>
+          {/* Folder Name Animation */}
+          <div
+            className={
+              showFolderAnimation
+                ? "ImagePage_Loading_Animation--Folder_Name"
+                : "ImagePage_Loading_Animation--Folder_Name ImagePage_Loading_Animation--Folder_Name--Inactive"
+            }
+          >
+            <div className="ImagePage_Loading_Animation--Folder_Name--Container">
+              <p className="ImagePage_Loading_Animation--Folder_Name--Main_Text_1">
+                Cherish the memories
+              </p>
+              <p className="ImagePage_Loading_Animation--Folder_Name--Sub_Text">
+                shared by
+              </p>
+              <p className="ImagePage_Loading_Animation--Folder_Name--Main_Text_2">
+                {folderName}
+              </p>
+            </div>
+          </div>
+          {/* Swipe Animation */}
+          <div
+            className={
+              showSwipeAnimation
+                ? "ImagePage_Loading_Animation--Swipe_Main"
+                : "ImagePage_Loading_Animation--Swipe_Main ImagePage_Loading_Animation--Swipe_Main--Inactive"
+            }
+          >
+            <div className="ImagePage_Loading_Animation--Swipe_Container">
+              <p className="ImagePage_Loading_Animation--Swipe--Text">
+                To scroll through images
+              </p>
+              <div
+                className={
+                  showSwipeAnimation
+                    ? "ImagePage_Loading_Animation--Swipe--Icon"
+                    : "ImagePage_Loading_Animation--Swipe--Icon ImagePage_Loading_Animation--Swipe--Icon--Inactive"
+                }
+              >
+                <MdOutlineSwipe size={50} />
+              </div>
+              <p className="ImagePage_Loading_Animation--Swipe--Text">
+                Swipe left or right
+              </p>
+            </div>
+          </div>
         </div>
       </div>
       <div

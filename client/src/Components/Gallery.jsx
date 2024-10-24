@@ -24,7 +24,7 @@ function Gallery() {
 
   useEffect(() => {
     sessionStorage.setItem("prevLoc", location.key);
-    const currentFolderId = sessionStorage.getItem("currentFolder");
+    const currentFolderId = sessionStorage.getItem("currentFolderId");
     if (currentFolderId) {
       setCurrentFolder(currentFolderId);
     }
@@ -47,6 +47,8 @@ function Gallery() {
                 key={index}
                 className="Folder_Container"
                 onClick={() => {
+                  sessionStorage.setItem("currentFolderName", folder.name);
+                  sessionStorage.setItem("currentFolderId", folder.id);
                   navigate(`folder/${folder.id}`);
                 }}
               >
