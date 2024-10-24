@@ -7,6 +7,8 @@ import "../Styles/ImagePage.css";
 function ImagePage() {
   const [folderFiles, setFolderFiles] = useState([]);
   const [proxyUrl, setProxyUrl] = useState([]);
+  const [showNotice, setShowNotice] = useState(false);
+  const [showNoticeButton, setShowNoticeButton] = useState(false);
   const trackerLimit = 5;
   const [tracker, setTracker] = useState(-1);
   const folderId = useParams().id;
@@ -152,10 +154,56 @@ function ImagePage() {
   useEffect(() => {
     getInitialImages(folderId);
     sessionStorage.setItem("currentFolder", folderId);
+    setTimeout(() => {
+      setShowNoticeButton(true);
+    }, 4000);
+    setTimeout(() => {
+      setShowNotice(true);
+    }, 1600);
   }, []);
 
   return (
     <div className="ImagePage">
+      <div className="ImagePage_Loading_Animation_Container">
+        <div className="ImagePage_Loading_Animation">
+          <div
+            className={
+              showNotice
+                ? "ImagePage_Loading_Animation--Message"
+                : "ImagePage_Loading_Animation--Message ImagePage_Loading_Animation--Message--Inactive"
+            }
+          >
+            <div className="ImagePage_Loading_Animation--Message--Container">
+              <div className="ImagePage_Loading_Animation--Message--Tint"></div>
+              <p className="ImagePage_Loading_Animation--Message--Header">
+                Notice
+              </p>
+              <p className="ImagePage_Loading_Animation--Message--Text">
+                The images uploaded on our site are high-definition to provide
+                the best viewing experience. Please ensure you have a stable
+                internet connection for faster loading. Please be patient if the
+                images take a bit longer to appear. Thank you!
+              </p>
+              <div
+                className={
+                  showNoticeButton
+                    ? "ImagePage_Loading_Animation--Message--Button"
+                    : "ImagePage_Loading_Animation--Message--Button ImagePage_Loading_Animation--Message--Button--Invisible"
+                }
+                onClick={() => {
+                  setShowNotice(false);
+                }}
+              >
+                <div className="ImagePage_Loading_Animation--Message--Button--Tint"></div>
+                <span className="ImagePage_Loading_Animation--Message--Button--Text">
+                  OK
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="ImagePage_Loading_Animation--Folder_Name"></div>
+        </div>
+      </div>
       <div
         className="ImagePage_Images"
         onScroll={() => {
