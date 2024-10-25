@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { MdDownload, MdOutlineSwipe } from "react-icons/md";
+import { IoMdArrowRoundBack } from "react-icons/io";
 import axios from "axios";
 import "../Styles/ImagePage.css";
 
@@ -14,11 +15,13 @@ function ImagePage() {
   const [showNoticeBackground, setShowNoticeBackground] = useState(false);
   const [showFolderAnimation, setShowFolderAnimation] = useState(false);
   const [showSwipeAnimation, setShowSwipeAnimation] = useState(false);
+  const [showActualImages, setShowActualImages] = useState(false);
   const trackerLimit = 5;
   const [tracker, setTracker] = useState(-1);
   const folderId = useParams().id;
   const maxLoad = 10;
   const imageRef = useRef(null);
+  const navigate = useNavigate();
 
   async function getInitialImages(id) {
     const response = await axios.post(
@@ -175,6 +178,18 @@ function ImagePage() {
     <div className="ImagePage">
       <div
         className={
+          showActualImages
+            ? "ImagePage_Back_Button"
+            : "ImagePage_Back_Button--Inactive"
+        }
+        onClick={() => {
+          navigate("/gallery");
+        }}
+      >
+        <IoMdArrowRoundBack size={25} color="white" />
+      </div>
+      <div
+        className={
           showAllAnimations
             ? "ImagePage_Loading_Animations_Container"
             : "ImagePage_Loading_Animations_Container--Inactive"
@@ -218,6 +233,7 @@ function ImagePage() {
                   setTimeout(() => {
                     setShowSwipeAnimation(true);
                     setTimeout(() => {
+                      setShowActualImages(true);
                       setShowAllAnimations(false);
                     }, 4000);
                   }, 6500);
@@ -282,7 +298,9 @@ function ImagePage() {
         </div>
       </div>
       <div
-        className="ImagePage_Images"
+        className={
+          showActualImages ? "ImagePage_Images" : "ImagePage_Images--Inactive"
+        }
         onScroll={() => {
           if (imageRef.current) {
             const imageRect = imageRef.current.getBoundingClientRect();
@@ -322,6 +340,11 @@ function ImagePage() {
                 </div>
               </div>
               <div className="ImagePage_Images--Image">
+                <div className="ImagePage_Images--Number">
+                  <span>
+                    {index + 1} / {folderFiles.length}
+                  </span>
+                </div>
                 <img src={image.url} loading="lazy"></img>
               </div>
             </div>
