@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useOutletContext, useLocation, useNavigate } from "react-router-dom";
-import { FaRegFolderOpen } from "react-icons/fa";
+import { FaRegFolderOpen, FaHome } from "react-icons/fa";
 import data from "../assets/Gallery";
 import axios from "axios";
 import "../Styles/Gallery.css";
@@ -33,6 +33,14 @@ function Gallery() {
   return (
     <>
       <div className="Gallery_Main">
+        <FaHome
+          size={27}
+          className="Gallery_Home--Icon"
+          onClick={() => {
+            console.log("click");
+            navigate("/");
+          }}
+        />
         <div className="Gallery_Background">
           <img
             className="Gallery_Background--Image"

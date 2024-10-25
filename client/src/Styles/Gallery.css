@@ -11,6 +11,14 @@
     margin-top: 80px;
 }
 
+.Gallery_Home--Icon {
+  color: white;
+  position: absolute;
+  z-index: 5;
+  top: 10px;
+  left: 12px;
+}
+
 .Gallery_Background {
   position: absolute;
   z-index: -1;
