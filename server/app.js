@@ -27,6 +27,8 @@ const auth = new google.auth.JWT(process.env.CE, null, process.env.PK, [
 
 const drive = google.drive({ version: "v3", auth: auth });
 
+/* This is just for Development purpose  */ 
+
 async function deleteFolder(fileId) {
   try {
     await drive.files.delete({ fileId });
@@ -36,7 +38,7 @@ async function deleteFolder(fileId) {
   }
 }
 
-// deleteFolder("1MPLHpjl21qdsOq-sWCEQUyHz7t-YwlJi");
+// deleteFolder("1iadDbYOik0TMhnjwTRGe29siLwFy6Rv8");
 
 /* Basic Get API */
 

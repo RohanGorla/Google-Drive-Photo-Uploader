@@ -62,7 +62,7 @@ function Gallery() {
             src={`data:image/jpeg;base64,${data.bgImage}`}
           ></img>
         </div>
-        {allFoldersData ? (
+        {allFoldersData.length ? (
           <section className="Gallery_Folders">
             {allFoldersData?.map((folder, index) => {
               return (
