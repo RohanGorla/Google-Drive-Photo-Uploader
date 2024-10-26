@@ -1,6 +1,7 @@
 :root {
   --Folder_Name: 22px;
   --Folder_View_Button: 16px;
+  --Folder_Empty_Message: 20px;
 }
 
 .Gallery_Main {
@@ -121,4 +122,46 @@
   z-index: 3;
   font-size: var(--Folder_View_Button);
   font-weight: 600;
+}
+
+.Gallery_Folders--Empty {
+  height: 100%;
+  width: 100%;
+  padding: 1em 2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Gallery_Folders--Empty_Message_Container {
+  position: relative;
+  z-index: 2;
+  margin: 0em auto;
+  padding: 2em;
+  border-style: none;
+  border-radius: 15px;
+  border: 2px solid black;
+  box-shadow: 5px 5px black;
+}
+
+.Gallery_Folders--Empty_Message_Container--Tint {
+  background-color: gray;
+  position: absolute;
+  z-index: 1;
+  opacity: .8;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  border-style: none;
+  border-radius: 12px;
+}
+
+.GalleryFolders--Empty_Message {
+  position: relative;
+  z-index: 2;
+  font-size: var(--Folder_Empty_Message);
+  font-weight: 500;
+  line-height: 1.5;
+  /* color: white; */
 }
