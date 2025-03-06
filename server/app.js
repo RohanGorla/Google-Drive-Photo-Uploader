@@ -38,7 +38,7 @@ async function deleteFolder(fileId) {
   }
 }
 
-// deleteFolder("1iadDbYOik0TMhnjwTRGe29siLwFy6Rv8");
+// deleteFolder("1iyaGtdPyiWS1_-DRkPSaXHApoXeziJ1m");
 
 /* Basic Get API */
 
